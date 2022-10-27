@@ -5,6 +5,9 @@
 # Conventional directory for build output.
 build/
 
+# sensitive files
+lib/service/client.dart
+
 .flutter-plugins
 .flutter-plugins-dependencies
 pubspec.lock
