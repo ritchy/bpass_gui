@@ -1,4 +1,4 @@
-import 'package:password_manager/model/account_view_controller.dart';
+import 'package:password_manager/controller/account_view_controller.dart';
 import 'package:password_manager/service/encryption_handler.dart';
 import 'model/accounts.dart';
 import 'package:desktop_window/desktop_window.dart';

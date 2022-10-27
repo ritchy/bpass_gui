@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:password_manager/main.dart';
 import 'package:password_manager/service/google_api.dart';
 import 'package:password_manager/service/google_service_notifier.dart';
-import 'package:password_manager/model/account_view_controller.dart';
+import 'package:password_manager/controller/account_view_controller.dart';
 import 'package:table_sticky_headers/table_sticky_headers.dart';
 import 'package:password_manager/model/accounts.dart';
 import 'package:provider/provider.dart';
