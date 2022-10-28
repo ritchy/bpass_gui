@@ -97,6 +97,10 @@ class AccountsPageState extends State<AccountsPage> {
 
   void cancelGoogleDriveLogin() {}
 
+  Future<void> handleDenyResponse() async {
+    await googleServiceNotifier.handleDenyResponse();
+  }
+
   Future<void> handleGoogleDriveLogout() async {
     log.info("Logging out ...");
     setState(() {
@@ -110,7 +114,40 @@ class AccountsPageState extends State<AccountsPage> {
 
   Widget getRequestAccessDialog() {
     //log.info("getRequestAccessDialog()");
-    if (accountViewController.promptToRequestDriveAccess) {
+    if (accountViewController.promptToShowDeniedAccess) {
+      return SimpleDialog(
+        title: const Text("""Your Drive request was denied,\ncannot sync."""),
+        children: <Widget>[
+          SimpleDialogOption(
+            onPressed: () {
+              log.info("access denied ..");
+              setState(() {
+                accountViewController.promptToShowDeniedAccess = false;
+                handleDenyResponse();
+              });
+            },
+            child: const Text('Dismiss'),
+          )
+        ],
+      );
+    } else if (accountViewController.promptToShowOutstandingRequest) {
+      return SimpleDialog(
+        title: const Text(
+            """You are still waiting for\ngranted access to Drive"""),
+        children: <Widget>[
+          SimpleDialogOption(
+            onPressed: () {
+              log.info("access under review..");
+              setState(() {
+                accountViewController.promptToShowOutstandingRequest = false;
+                handleGoogleDriveLogout();
+              });
+            },
+            child: const Text('Dismiss'),
+          )
+        ],
+      );
+    } else if (accountViewController.promptToRequestDriveAccess) {
       return SimpleDialog(
         title: const Text('Existing account file in Drive, request access?'),
         children: <Widget>[
@@ -129,6 +166,7 @@ class AccountsPageState extends State<AccountsPage> {
               log.info("not requesting access ..");
               setState(() {
                 accountViewController.promptToRequestDriveAccess = false;
+                handleGoogleDriveLogout();
               });
             },
             child: const Text('Skip Request'),
@@ -142,7 +180,8 @@ class AccountsPageState extends State<AccountsPage> {
 
   Widget getRequestDialog() {
     //log.info("getRequestDialog() ${accountViewController.outstandingRequests}");
-    if (accountViewController.outstandingRequests.isNotEmpty) {
+    if (accountViewController.haveGrantedAccess &&
+        accountViewController.outstandingRequests.isNotEmpty) {
       ClientAccess accessRequest = accountViewController.outstandingRequests[0];
       return SimpleDialog(
         title: Text('Access Requested for ${accessRequest.clientName}'),

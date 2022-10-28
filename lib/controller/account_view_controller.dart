@@ -1,15 +1,20 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:password_manager/main.dart';
 import 'package:password_manager/service/google_api.dart';
 import 'package:password_manager/model/accounts.dart';
 import 'package:logging/logging.dart';
 import 'dart:io';
+import 'package:password_manager/console.dart';
 
 class AccountViewController extends ChangeNotifier {
   Accounts accounts;
   GoogleService? googleService;
   List outstandingRequests = [];
+  bool haveGrantedAccess = false;
   bool promptToRequestDriveAccess = false;
+  bool promptToShowDeniedAccess = false;
+  bool promptToShowOutstandingRequest = false;
   final log = Logger('AccountViewController');
   List<String> titleColumns = [
     "UserName",
@@ -71,7 +76,7 @@ class AccountViewController extends ChangeNotifier {
             notifyListeners();
           }
         } else {
-          stdout.writeln(
+          Console.normal(
               "Trying to sync accounts with Drive file, but we cannot seem to download it");
         }
       }
@@ -86,6 +91,8 @@ class AccountViewController extends ChangeNotifier {
     } else if (fileExistsInDrive) {
       String? key = googleService?.googleSettings.keyAsBase64;
       if (key != null && key.isNotEmpty) {
+        //if we have the key, then we've already been granted access
+        haveGrantedAccess = true;
         //we have a file in Drive and an encryption key, good to go
         log.info("Got key, downloading file from Google Drive ... ");
         File? toReconcile = await googleService?.downloadAccountFile();
@@ -107,25 +114,29 @@ class AccountViewController extends ChangeNotifier {
         //outstandingRequest ??= null;
         if (outstandingRequest != null) {
           if (outstandingRequest.accessStatus == ClientAccess.REQUESTED) {
-            stdout.writeln(
-                "You have an outstanding request for access to existing accounts in Drive, run sync again when request has been granted.");
+            log.info(
+                "Existing request for access to existing accounts in Drive, run sync again when request has been granted.");
+            promptToShowOutstandingRequest = true;
+            //googleServiceNotifier.handleGoogleDriveLogout();
           } else if (outstandingRequest.accessStatus == ClientAccess.DENIED) {
-            stdout.writeln(
+            Console.normal(
                 "You sent a request that was denied run sync again if you want to send another request");
-            await googleService?.removeOutstandingRequests();
-            await googleService?.updateClientAccessRequests();
+            promptToShowDeniedAccess = true;
+            //await googleService?.removeOutstandingRequests();
+            //await googleService?.updateClientAccessRequests();
           } else if (outstandingRequest.accessStatus == ClientAccess.GRANTED) {
-            stdout.writeln("Request granted .. ");
+            Console.normal("Request granted .. ");
             final encryptedKey = outstandingRequest.encryptedAccessKey;
             if (encryptedKey != null) {
               //print("decrypting key...");
               await googleService?.decryptAndSaveKey(encryptedKey);
+              haveGrantedAccess = true;
             } else {
               log.warning("granted access to Drive, but no key provided??");
             }
           }
         } else {
-          //stdout.writeln("-------> Request Access?");
+          //Console.normal("-------> Request Access?");
           log.info(
               "This appears to be first sync and there's an existing file in Google Drive, request access. ");
           promptToRequestDriveAccess = true;
@@ -139,7 +150,7 @@ class AccountViewController extends ChangeNotifier {
         //looks like we already set up encryption key, so just synd
         accounts.updateAccountFiles(googleService);
       } else {
-        print(
+        Console.normal(
             "This appears to be your first sync, generating encryption keys ...");
       }
     }
@@ -191,7 +202,7 @@ class AccountViewController extends ChangeNotifier {
   Future<void> updateOutstandingRequest(ClientAccess accessRequest) async {
     if (googleService != null) {
       if (googleService!.loggedIn) {
-        stdout.writeln("Trying to sync with Drive file, but not logged in");
+        Console.normal("Trying to sync with Drive file, but not logged in");
       } else {
         await googleService?.updateClientRequest(accessRequest);
       }
@@ -234,7 +245,7 @@ class AccountViewController extends ChangeNotifier {
       log.warning("Trying to sync with Drive file, but not logged in");
     } else {
       if (!await googleService.clientAccessFileExistInDrive()) {
-        stdout.writeln("Access file does not exist in drive, creating ...");
+        Console.normal("Access file does not exist in drive, creating ...");
         googleService.generateNewClientAccessFile();
       } else {
         ClientAccessRequests clientAccessRequests =

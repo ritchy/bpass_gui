@@ -38,6 +38,12 @@ class GoogleServiceNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> handleDenyResponse() async {
+    await googleService?.removeOutstandingRequests();
+    await googleService?.updateClientAccessRequests();
+    handleGoogleDriveLogout();
+  }
+
   Future<void> ensureGoogleServiceRunning() async {
     log.finest("ensureGoogleServiceRunning()");
     if (googleService == null) {

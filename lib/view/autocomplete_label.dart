@@ -1,7 +1,5 @@
 library flutter_autocomplete_label;
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
@@ -527,15 +525,16 @@ class AutocompleteLabel<T> extends StatefulWidget {
     VoidCallback onFieldSubmitted,
   ) {
     return ConstrainedBox(
-      constraints: BoxConstraints(minWidth: 68),
+      constraints: const BoxConstraints(minWidth: 68),
       child: DryIntrinsicWidth(
         child: Padding(
-            padding: EdgeInsets.all(5),
+            padding: const EdgeInsets.all(5),
             child: TextField(
               focusNode: focusNode,
-              style: TextStyle(fontSize: AutocompleteLabel._defaultFontSize),
-              strutStyle: StrutStyle(height: 1.0),
-              decoration: InputDecoration(
+              style:
+                  const TextStyle(fontSize: AutocompleteLabel._defaultFontSize),
+              strutStyle: const StrutStyle(height: 1.0),
+              decoration: const InputDecoration(
                 contentPadding: EdgeInsets.zero,
                 isDense: true,
                 border: InputBorder.none,
