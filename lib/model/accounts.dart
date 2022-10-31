@@ -267,7 +267,7 @@ class Accounts {
         }
       }
     }
-    print("You currently have ${accounts.length} accounts");
+    log.info("You currently have ${accounts.length} accounts");
     displayedAccounts = accounts;
     //notifyListeners();
   }

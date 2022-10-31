@@ -25,7 +25,7 @@ class GoogleService {
     log.finer("creating new google service..");
   }
   void initCryptoHandler() {
-    log.info("init crypt $appDirPath and ${googleSettings.keyAsBase64}");
+    log.fine("init crypt $appDirPath and ${googleSettings.keyAsBase64}");
     String? key = googleSettings.keyAsBase64;
     if (key == null || key.isEmpty) {
       cryptoHandler = AccountFileEncryptionHandler(appDirPath!);
@@ -1222,7 +1222,7 @@ class ClientAccess {
     //print("converting $this");
     clientId ??= DateTime.now().millisecondsSinceEpoch.toString();
     clientName ??= Platform.operatingSystem;
-    lastUpdated = DateTime.now();
+    lastUpdated ??= DateTime.now();
     publicKey ??= "";
     encryptedAccessKey ??= "";
     final Map<String, dynamic> clients = Map<String, dynamic>();
