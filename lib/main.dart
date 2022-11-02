@@ -86,7 +86,8 @@ void setupWindow() async {
     Size size = await DesktopWindow.getWindowSize();
     stdout.writeln(size);
     //await DesktopWindow.setMaxWindowSize(Size(800, 800));
-    await DesktopWindow.setWindowSize(Size(750, 550));
+    await DesktopWindow.setMinWindowSize(Size(400, 640));
+    await DesktopWindow.setWindowSize(Size(850, 640));
   }
 }
 
