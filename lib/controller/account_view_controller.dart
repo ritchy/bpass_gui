@@ -9,6 +9,9 @@ import 'package:password_manager/console.dart';
 
 class AccountViewController extends ChangeNotifier {
   Accounts accounts;
+  AccountItem? currentlySelectedAccount;
+  bool showAccountCardView = false;
+  bool showAccountEditCardView = false;
   GoogleService? googleService;
   List outstandingRequests = [];
   bool haveGrantedAccess = false;
@@ -32,6 +35,25 @@ class AccountViewController extends ChangeNotifier {
 
   void loadFile(File file) {
     accounts.loadFile(file);
+    notifyListeners();
+  }
+
+  void editSelectedAccount() {
+    showAccountEditCardView = true;
+    showAccountCardView = false;
+    notifyListeners();
+  }
+
+  void clearSelectedAccount() {
+    showAccountCardView = false;
+    showAccountEditCardView = false;
+    currentlySelectedAccount = null;
+    notifyListeners();
+  }
+
+  void selectAccount(AccountItem account) {
+    currentlySelectedAccount = account;
+    showAccountCardView = true;
     notifyListeners();
   }
 
