@@ -11,6 +11,9 @@ import 'package:password_manager/view/autocomplete_label.dart';
 import 'package:logging/logging.dart';
 import 'package:flutter/services.dart';
 
+import 'account_card_view.dart';
+import 'account_grid_view.dart';
+
 class AccountsPage extends StatefulWidget {
   const AccountsPage({super.key});
 
@@ -24,6 +27,7 @@ class AccountsPageState extends State<AccountsPage> {
   AccountItem? selectedAccount;
   bool sortAscending = true;
   bool autoSelectColumn = false;
+  bool showGridView = true;
   final log = Logger('_AccountsPageState');
   AccountsPageState();
 
@@ -114,6 +118,7 @@ class AccountsPageState extends State<AccountsPage> {
 
   Widget getRequestAccessDialog() {
     //log.info("getRequestAccessDialog()");
+    int x = 1;
     if (accountViewController.promptToShowDeniedAccess) {
       return SimpleDialog(
         title: const Text("""Your Drive request was denied,\ncannot sync."""),
@@ -216,6 +221,13 @@ class AccountsPageState extends State<AccountsPage> {
   }
 
   Widget getWidgetRow() {
+    var displayIcon = const Icon(Icons.list_rounded, size: 55);
+    if (showGridView) {
+      displayIcon = const Icon(
+        Icons.apps_rounded,
+        size: 50,
+      );
+    }
     return Container(
         color: Colors.black54,
         child: Row(
@@ -230,7 +242,7 @@ class AccountsPageState extends State<AccountsPage> {
               style:
                   TextStyle(fontWeight: FontWeight.bold, color: Colors.white70),
             ),
-            SizedBox(
+            const SizedBox(
               //width: 100.0,
               height: 35,
               child: TagDropdownButton(),
@@ -242,10 +254,19 @@ class AccountsPageState extends State<AccountsPage> {
             const Padding(
                 padding: EdgeInsets.all(
                     4)), // This trailing comma makes auto-formatting nicer for build methods.
-            const Icon(
-              Icons.account_circle,
+            IconButton(
+              //Icons.list_rounded,
+              iconSize: 55,
+              alignment: Alignment.topCenter,
+              onPressed: () {
+                setState(() {
+                  showGridView = !showGridView;
+                  accountViewController.showAccountCardView = false;
+                });
+              },
+              padding: const EdgeInsets.all(4.0),
+              icon: displayIcon,
               color: Colors.white70,
-              size: 60,
             ),
             const Padding(
                 padding: EdgeInsets.all(
@@ -440,6 +461,22 @@ class AccountsPageState extends State<AccountsPage> {
     );
   }
 
+  Widget getMainStageWidget() {
+    AccountItem? currentAccount =
+        accountViewController.currentlySelectedAccount;
+    if (accountViewController.showAccountEditCardView &&
+        currentAccount != null) {
+      return AccountEditCardView(currentAccount);
+    } else if (accountViewController.showAccountCardView &&
+        currentAccount != null) {
+      return AccountCardView(currentAccount);
+    } else if (showGridView) {
+      return const Expanded(child: AccountGridView());
+    } else {
+      return Expanded(child: getTable());
+    }
+  }
+
   Widget getRowTitleEditContainer(int rowNumber) {
     //log.info("selected column $selectedColumn");
     if (selectedColumn == null) {
@@ -521,7 +558,9 @@ class AccountsPageState extends State<AccountsPage> {
             getRequestAccessDialog(),
             getRequestDialog(),
             getWidgetRow(),
-            Expanded(child: getTable())
+            getMainStageWidget(),
+            //Expanded(child: getTable()),
+            //const Expanded(child: AccountGridView()),
           ])),
     );
   }
@@ -667,7 +706,7 @@ class TagEdit extends StatelessWidget {
 ***/
 
 class TagDropdownButton extends StatefulWidget {
-  TagDropdownButton({super.key});
+  const TagDropdownButton({super.key});
 
   @override
   State<TagDropdownButton> createState() => _TagDropdownButtonState();
@@ -719,5 +758,104 @@ class _TagDropdownButtonState extends State<TagDropdownButton> {
                 ));
           }).toList(),
         ));
+  }
+}
+
+class AccountEditCardView extends StatelessWidget {
+  AccountItem item;
+  AccountEditCardView(this.item, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double windowHeight = MediaQuery.of(context).size.height;
+    return SizedBox(
+        height: windowHeight - 150,
+        child: ListView(
+          padding: const EdgeInsets.all(8),
+          children: <Widget>[
+            Container(
+              height: 50,
+              color: Colors.amber[600],
+              child: const Center(child: Text('Entry A')),
+            ),
+            Container(
+              height: 50,
+              color: Colors.amber[500],
+              child: const Center(child: Text('Entry B')),
+            ),
+            Container(
+              height: 50,
+              color: Colors.amber[100],
+              child: const Center(child: Text('Entry C')),
+            ),
+            getCard(),
+            getCard(),
+            getCard(),
+          ],
+        ));
+  }
+
+  Widget getCard() {
+    return Card(
+        elevation: 50,
+        margin: const EdgeInsets.all(20.0),
+        child: SizedBox(
+            //width: 300,
+            //height: 500,
+            child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Row(
+                children: [
+                  SizedBox(width: 200, child: getTextBox("Account Name"))
+                ],
+              ),
+              getRow("firstLabel", "secondLabel"),
+              getRow("firstLabel", "secondLabel"),
+              getRow("firstLabel", "secondLabel"),
+              getRow("firstLabel", "secondLabel"),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  TextButton(
+                    child: const Text('Done'),
+                    onPressed: () {
+                      accountViewController.clearSelectedAccount();
+                    },
+                  ),
+                  //const SizedBox(width: 2),
+                ],
+              ),
+            ],
+          ),
+        )));
+  }
+
+  Widget getRow(String firstLabel, String secondLabel) {
+    return SizedBox(
+        height: 70,
+        child: Row(
+          children: [
+            Expanded(child: getTextBox("label")),
+            Expanded(child: getTextBox("label"))
+          ],
+        ));
+  }
+
+  Widget getTextBox(String label) {
+    return Container(
+        padding: const EdgeInsets.all(8.0),
+        child: TextField(
+            onSubmitted: (value) {},
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              filled: true,
+              fillColor: Colors.white70,
+              contentPadding: EdgeInsets.all(5.0),
+              labelText: "label",
+            )));
   }
 }
