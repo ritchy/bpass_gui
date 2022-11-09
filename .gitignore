@@ -11,3 +11,5 @@ lib/service/client.dart
 .flutter-plugins
 .flutter-plugins-dependencies
 pubspec.lock
+
+.DS_Store
