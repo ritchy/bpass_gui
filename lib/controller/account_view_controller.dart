@@ -51,6 +51,12 @@ class AccountViewController extends ChangeNotifier {
     notifyListeners();
   }
 
+  void cancelEditMode() {
+    showAccountCardView = true;
+    showAccountEditCardView = false;
+    notifyListeners();
+  }
+
   void selectAccount(AccountItem account) {
     currentlySelectedAccount = account;
     showAccountCardView = true;
