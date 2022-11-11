@@ -63,7 +63,28 @@ class AccountViewController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateAccountFiles(GoogleService? googleService) async {
+  void updateCurrentlySelectedAccount() {
+    AccountItem? item = currentlySelectedAccount;
+    if (item != null) {
+      accounts.updateAccountItem(item);
+    }
+  }
+
+  bool itemDifferent(AccountItem item) {
+    AccountItem? toCompare = currentlySelectedAccount;
+    if (toCompare != null) {
+      return item.isEqual(toCompare);
+    } else {
+      return true;
+    }
+  }
+
+  void updateAccountItem(AccountItem item) {
+    print('updating $item');
+    accounts.updateAccountItem(item);
+  }
+
+  Future<void> updateAccountFiles() async {
     await accounts.updateAccountFiles(googleService);
     notifyListeners();
   }

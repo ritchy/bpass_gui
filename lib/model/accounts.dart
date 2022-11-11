@@ -402,6 +402,18 @@ class Accounts {
     return somethingChanged;
   }
 
+  void updateAccountItem(AccountItem newAccountItem) {
+    for (int i = 0; i < accounts.length; ++i) {
+      AccountItem item = accounts[i];
+      if (item.id == newAccountItem.id) {
+        log.info("updating $item to $newAccountItem");
+        newAccountItem.lastUpdated = DateTime.now();
+        accounts[i] = newAccountItem;
+        break;
+      }
+    }
+  }
+
   AccountItem? findAccountItemById(int accountId) {
     for (AccountItem account in accounts) {
       if (account.id == accountId) {
@@ -542,5 +554,17 @@ class AccountItem {
         (hint == "") &&
         (notes == "") &&
         (tags.isEmpty));
+  }
+
+  bool isEqual(AccountItem item) {
+    return ((name == item.name) &&
+        (username == item.username) &&
+        (password == item.password) &&
+        (accountNumber == item.accountNumber) &&
+        (url == item.url) &&
+        (email == item.email) &&
+        (hint == item.hint) &&
+        (notes == item.notes) &&
+        (tags == item.tags));
   }
 }

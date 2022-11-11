@@ -72,7 +72,7 @@ class AccountEditCardView extends StatelessWidget {
                       TextButton(
                           child: const Text('Save'),
                           onPressed: () {
-                            //accountViewController.editSelectedAccount();
+                            accountViewController.saveChanges();
                           }),
                       TextButton(
                         child: const Text('Cancel'),
@@ -152,16 +152,16 @@ class AccountEditCardView extends StatelessWidget {
               children: [
                 Expanded(
                     child: getTextWidget("User Name", item.username,
-                        onSubmit: (value) =>
-                            print("${item.username} -> $value"))), //),
+                        onSubmit: (value) => item.username = value)),
+                //print("${item.username} -> $value"))), //),
                 Expanded(
                     child: getTextWidget("Hint", item.hint,
-                        onSubmit: (value) =>
-                            print("${item.hint} -> $value"))), //),
+                        onSubmit: (value) => item.hint = value)),
+                //print("${item.hint} -> $value"))), //),
                 Expanded(
                     child: getTextWidget("Account Number", item.accountNumber,
-                        onSubmit: (value) =>
-                            print("${item.accountNumber} -> $value"))), //),
+                        onSubmit: (value) => item.accountNumber = value)),
+                //print("${item.accountNumber} -> $value"))), //),
                 Expanded(
                     child: getTextWidget("Tags", tagString,
                         onSubmit: (value) => print("${item.tags} -> $value"))),
@@ -243,6 +243,9 @@ class AccountEditCardView extends StatelessWidget {
       return TextField(
           controller: controller,
           onSubmitted: onSubmit,
+          onChanged: (String value) {
+            print(value);
+          },
           keyboardType: TextInputType.multiline,
           maxLines: maxLines,
           decoration: InputDecoration(
@@ -253,6 +256,7 @@ class AccountEditCardView extends StatelessWidget {
           child: TextField(
               controller: controller,
               onSubmitted: onSubmit,
+              onEditingComplete: () => {print(value)},
               decoration: InputDecoration(
                 border: const OutlineInputBorder(),
                 labelText: label,

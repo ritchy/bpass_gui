@@ -14,6 +14,7 @@ import 'package:flutter/services.dart';
 import 'account_card_edit.dart';
 import 'account_card_view.dart';
 import 'account_grid_view.dart';
+import 'account_list_edit.dart';
 
 class AccountsPage extends StatefulWidget {
   const AccountsPage({super.key});
@@ -428,8 +429,7 @@ class AccountsPageState extends State<AccountsPage> {
           if (accountId != null) {
             accountViewController.updateFieldById(accountId, i, value);
             accountViewController.saveChanges();
-            accountViewController
-                .updateAccountFiles(googleServiceNotifier.googleService);
+            accountViewController.updateAccountFiles();
           }
         } else {
           log.info("no change");
@@ -467,7 +467,8 @@ class AccountsPageState extends State<AccountsPage> {
         accountViewController.currentlySelectedAccount;
     if (accountViewController.showAccountEditCardView &&
         currentAccount != null) {
-      return AccountEditCardView(currentAccount);
+      //return AccountEditCardView(currentAccount);
+      return AccountListEditView(currentAccount);
     } else if (accountViewController.showAccountCardView &&
         currentAccount != null) {
       return AccountCardView(currentAccount);
@@ -519,8 +520,7 @@ class AccountsPageState extends State<AccountsPage> {
         if (value != currentName) {
           log.info("current value is $currentName, submitted $value\n");
           accountViewController.updateName(rowNumber, value);
-          accountViewController
-              .updateAccountFiles(googleServiceNotifier.googleService);
+          accountViewController.updateAccountFiles();
         } else {
           log.info("no change");
         }
@@ -548,6 +548,7 @@ class AccountsPageState extends State<AccountsPage> {
             ),
       },
       home: Scaffold(
+          resizeToAvoidBottomInset: true,
           appBar: AppBar(
             title: const Text(
               'Accounts',
