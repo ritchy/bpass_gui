@@ -16,6 +16,7 @@ class AccountListEditView extends StatelessWidget {
     double windowWidth = MediaQuery.of(context).size.width;
     List<String> tags = (item.tags.isEmpty) ? [] : item.tags;
     String tagString = tags.join(', ');
+    String accountNameFirstChar = item.name[0];
 
     return Expanded(
         //height: windowHeight - 510,
@@ -23,6 +24,30 @@ class AccountListEditView extends StatelessWidget {
         child: ListView(
       padding: const EdgeInsets.all(8),
       children: <Widget>[
+        Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              CircleAvatar(
+                  radius: 40,
+                  backgroundColor: Colors.blue.shade900,
+                  child: Text(accountNameFirstChar,
+                      style: const TextStyle(
+                          fontSize: 52, fontWeight: FontWeight.bold))),
+              SizedBox(
+                  width: windowWidth - 100,
+                  child: Container(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Text(
+                          //overflow: TextOverflow.clip,
+                          //overflow: TextOverflow.ellipsis,
+                          softWrap: true,
+                          //maxLines: 2,
+                          item.name,
+                          //"Bank of America Jarbo",
+                          style: const TextStyle(
+                              fontSize: 28, fontWeight: FontWeight.bold)))),
+            ]),
         Container(
             height: 50,
             margin: const EdgeInsets.all(4),

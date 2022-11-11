@@ -15,6 +15,7 @@ import 'account_card_edit.dart';
 import 'account_card_view.dart';
 import 'account_grid_view.dart';
 import 'account_list_edit.dart';
+import 'account_list_view.dart';
 
 class AccountsPage extends StatefulWidget {
   const AccountsPage({super.key});
@@ -471,7 +472,8 @@ class AccountsPageState extends State<AccountsPage> {
       return AccountListEditView(currentAccount);
     } else if (accountViewController.showAccountCardView &&
         currentAccount != null) {
-      return AccountCardView(currentAccount);
+      //return AccountCardView(currentAccount);
+      return AccountListView(currentAccount);
     } else if (showGridView) {
       return const Expanded(child: AccountGridView());
     } else {
