@@ -29,37 +29,40 @@ class AccountListView extends StatelessWidget {
         child: ListView(
       padding: const EdgeInsets.fromLTRB(6, 2, 6, 2),
       children: <Widget>[
-        Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              CircleAvatar(
-                  radius: 40,
-                  backgroundColor: Colors.blue.shade900,
-                  child: Text(accountNameFirstChar,
-                      style: const TextStyle(
-                          fontSize: 52, fontWeight: FontWeight.bold))),
-              SizedBox(
-                  width: windowWidth - 100,
-                  child: Container(
-                      padding: const EdgeInsets.all(5.0),
-                      child: Text(
-                          //overflow: TextOverflow.clip,
-                          //overflow: TextOverflow.ellipsis,
-                          softWrap: true,
-                          //maxLines: 2,
-                          item.name,
-                          //"Bank of America Jarbo",
+        Container(
+            padding: const EdgeInsets.fromLTRB(6, 2, 6, 2),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  CircleAvatar(
+                      radius: 40,
+                      backgroundColor: Colors.blue.shade900,
+                      child: Text(accountNameFirstChar,
                           style: const TextStyle(
-                              fontSize: 28, fontWeight: FontWeight.bold)))),
-            ]),
+                              fontSize: 52, fontWeight: FontWeight.bold))),
+                  SizedBox(
+                      width: windowWidth - 100,
+                      child: Container(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Text(
+                              //overflow: TextOverflow.clip,
+                              //overflow: TextOverflow.ellipsis,
+                              softWrap: true,
+                              //maxLines: 2,
+                              item.name,
+                              //"Bank of America Jarbo",
+                              style: const TextStyle(
+                                  fontSize: 28, fontWeight: FontWeight.bold)))),
+                ])),
         Container(
             height: fieldHeight,
-            //margin: const EdgeInsets.all(4),
+            margin: const EdgeInsets.all(10),
             //padding: const EdgeInsets.all(4),
             child: Row(children: [
               Expanded(
                   child: Container(
+                      //color: Colors.amber,
                       padding: const EdgeInsets.fromLTRB(2, 0, 5, 0),
                       child:
                           getNameValue("Account Name:", item.name, vertical))),
@@ -71,7 +74,7 @@ class AccountListView extends StatelessWidget {
             ])),
         Container(
             height: fieldHeight,
-            //margin: const EdgeInsets.all(4),
+            margin: const EdgeInsets.all(10),
             //padding: const EdgeInsets.all(4),
             child: Row(children: [
               Expanded(
@@ -86,7 +89,7 @@ class AccountListView extends StatelessWidget {
             ])),
         Container(
             height: fieldHeight,
-            //margin: const EdgeInsets.all(4),
+            margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
             //padding: const EdgeInsets.all(4),
             child: Row(children: [
               Expanded(
@@ -100,39 +103,47 @@ class AccountListView extends StatelessWidget {
                           "Account Number:", item.accountNumber, vertical)))
             ])),
         Container(
-            //margin: const EdgeInsets.all(4),
+            margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+            //color: Colors.amber,
             //padding: const EdgeInsets.all(4),
-            height: 60,
+            height: fieldHeight,
             child: getVerticalNameValue("Tags:", tagString)),
-        Container(
-            //margin: const EdgeInsets.all(4),
-            //padding: const EdgeInsets.all(4),
-            height: 60,
-            child: getVerticalNameValue("Web URL:", item.url)),
+        Row(children: [
+          Expanded(
+              child: Container(
+                  margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  //color: Colors.amber,
+                  //padding: const EdgeInsets.all(4),
+                  height: 60,
+                  child: getVerticalNameValue("Web URL:", item.url))),
 
-        //onSubmit: (value) => print("${item.url} -> $value"))),
+          //onSubmit: (value) => print("${item.url} -> $value"))),
+          Expanded(
+              child: Container(
+                  margin: const EdgeInsets.all(10),
+                  //padding: const EdgeInsets.all(4),
+                  height: 60,
+                  child: getVerticalNameValue("Notes:", item.notes)))
+        ]),
         Container(
-            //margin: const EdgeInsets.all(4),
-            //padding: const EdgeInsets.all(4),
-            height: 120,
-            child: getVerticalNameValue("Notes:", item.notes)),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            TextButton(
-                child: const Text('Edit'),
-                onPressed: () {
-                  accountViewController.editSelectedAccount();
-                }),
-            TextButton(
-              child: const Text('Done'),
-              onPressed: () {
-                accountViewController.clearSelectedAccount();
-              },
-            ),
-            //const SizedBox(width: 2),
-          ],
-        ),
+            margin: const EdgeInsets.fromLTRB(10, 0, 40, 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                TextButton(
+                    child: const Text('Edit'),
+                    onPressed: () {
+                      accountViewController.editSelectedAccount();
+                    }),
+                TextButton(
+                  child: const Text('Done'),
+                  onPressed: () {
+                    accountViewController.clearSelectedAccount();
+                  },
+                ),
+                //const SizedBox(width: 2),
+              ],
+            )),
       ],
     ));
   }
