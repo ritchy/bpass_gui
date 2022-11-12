@@ -2,6 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:/Users/robertritchy/develop/flutter/bpass_gui/ios/Runner/Launch Screen.storyboard">
+   </FileRef>
+   <FileRef
+      location = "absolute:/Users/robertritchy/develop/flutter/bpass_gui/ios/Runner/Launch Screen.storyboard">
+   </FileRef>
+   <FileRef
       location = "group:Runner.xcodeproj">
    </FileRef>
    <FileRef
