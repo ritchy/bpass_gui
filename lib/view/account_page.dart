@@ -646,7 +646,7 @@ class AccountsPageState extends State<AccountsPage> {
 
 class _FilterSearch extends StatelessWidget {
   void updateFilter(String filterText) {
-    //log.info("updating filter to $filterText");
+    log.info("updating filter to $filterText");
     accountViewController.filterAccounts(filterText);
   }
 

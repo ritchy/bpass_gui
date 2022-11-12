@@ -17,7 +17,7 @@ class AccountGridViewState extends State<AccountGridView> {
     var accountViewController = context.watch<AccountViewController>();
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    print("width: $width / height: $height");
+    //print("width: $width / height: $height");
     int axisCount = 3;
     double aspectRatio = 3 / 1;
     if (width > 380 && width < 400) {
@@ -34,7 +34,8 @@ class AccountGridViewState extends State<AccountGridView> {
     }
     if (width < 380) {
       return ListView(
-          children: getChildrenCards(accountViewController.accounts.accounts));
+          children: getChildrenCards(
+              accountViewController.accounts.displayedAccounts));
     } else {
       return GridView.count(
         scrollDirection: Axis.vertical,
@@ -45,7 +46,8 @@ class AccountGridViewState extends State<AccountGridView> {
         crossAxisCount: axisCount,
         childAspectRatio: aspectRatio,
         // Generate 100 widgets that display their index in the List.
-        children: getChildrenCards(accountViewController.accounts.accounts),
+        children:
+            getChildrenCards(accountViewController.accounts.displayedAccounts),
       );
     }
   }
