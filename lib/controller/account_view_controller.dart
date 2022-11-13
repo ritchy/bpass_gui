@@ -10,8 +10,10 @@ import 'package:password_manager/console.dart';
 class AccountViewController extends ChangeNotifier {
   Accounts accounts;
   AccountItem? currentlySelectedAccount;
+  String filterDropDownValue = "No Filter";
   bool showAccountCardView = false;
   bool showAccountEditCardView = false;
+  bool showFilterViews = true;
   GoogleService? googleService;
   List outstandingRequests = [];
   bool haveGrantedAccess = false;
@@ -477,6 +479,7 @@ class AccountViewController extends ChangeNotifier {
   }
 
   void clearFilter() {
+    filterDropDownValue = "No Filter";
     accounts.clearFilter();
     notifyListeners();
   }

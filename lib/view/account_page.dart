@@ -31,6 +31,9 @@ class AccountsPageState extends State<AccountsPage> {
   bool sortAscending = true;
   bool autoSelectColumn = false;
   bool showGridView = true;
+  //bool showFilterViews = true;
+  //String filterDropDownValue = "No Filter";
+
   final log = Logger('_AccountsPageState');
   AccountsPageState();
 
@@ -223,33 +226,50 @@ class AccountsPageState extends State<AccountsPage> {
     }
   }
 
+  Widget getFilterSearch() {
+    //log.info("getFilterSearch($accountViewController.showFilterViews)");
+    bool showFilterViews = (!accountViewController.showAccountCardView &&
+        !accountViewController.showAccountEditCardView);
+    return Visibility(
+        visible: showFilterViews,
+        child: Row(children: [
+          TextButton(
+            onPressed: clearState,
+            child: _FilterSearch(),
+            //onPressed: () => Navigator.pushNamed(context, '/accounts'),
+          ),
+          const Text(
+            "Tags: ",
+            style:
+                TextStyle(fontWeight: FontWeight.bold, color: Colors.white70),
+          ),
+          const SizedBox(
+            //width: 100.0,
+            height: 35,
+            child: TagDropdownButton(),
+          ),
+        ]));
+  }
+
   Widget getWidgetRow() {
+    //log.finer("getWidgetRow");
+    clearState();
     var displayIcon = const Icon(Icons.list_rounded, size: 55);
     if (showGridView) {
       displayIcon = const Icon(
         Icons.apps_rounded,
         size: 50,
       );
+      //showFilterViews = true;
+    } else {
+      //showFilterViews = false;
     }
+    //print("getwidgetrow($showFilterViews)");
     return Container(
         color: Colors.black54,
         child: Row(
           children: <Widget>[
-            TextButton(
-              onPressed: clearState,
-              child: _FilterSearch(),
-              //onPressed: () => Navigator.pushNamed(context, '/accounts'),
-            ),
-            const Text(
-              "Tags: ",
-              style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white70),
-            ),
-            const SizedBox(
-              //width: 100.0,
-              height: 35,
-              child: TagDropdownButton(),
-            ),
+            getFilterSearch(),
             Expanded(
               child: Container(),
             ),
@@ -265,6 +285,7 @@ class AccountsPageState extends State<AccountsPage> {
                 setState(() {
                   showGridView = !showGridView;
                   accountViewController.showAccountCardView = false;
+                  accountViewController.showFilterViews = false;
                 });
               },
               padding: const EdgeInsets.all(4.0),
@@ -469,12 +490,21 @@ class AccountsPageState extends State<AccountsPage> {
     if (accountViewController.showAccountEditCardView &&
         currentAccount != null) {
       //return AccountEditCardView(currentAccount);
+      //setState(() {
+      //  showFilterViews = false;
+      //});
       return AccountListEditView(currentAccount);
     } else if (accountViewController.showAccountCardView &&
         currentAccount != null) {
       //return AccountCardView(currentAccount);
+      //setState(() {
+      //  showFilterViews = false;
+      //});
       return AccountListView(currentAccount);
     } else if (showGridView) {
+      //setState(() {
+      //  showFilterViews = true;
+      //});
       return const Expanded(child: AccountGridView());
     } else {
       return Expanded(child: getTable());
@@ -646,7 +676,7 @@ class AccountsPageState extends State<AccountsPage> {
 
 class _FilterSearch extends StatelessWidget {
   void updateFilter(String filterText) {
-    log.info("updating filter to $filterText");
+    log.finer("updating filter to $filterText");
     accountViewController.filterAccounts(filterText);
   }
 
@@ -711,24 +741,25 @@ class TagEdit extends StatelessWidget {
 
 class TagDropdownButton extends StatefulWidget {
   const TagDropdownButton({super.key});
-
   @override
   State<TagDropdownButton> createState() => _TagDropdownButtonState();
 }
 
 class _TagDropdownButtonState extends State<TagDropdownButton> {
   List<String> tags = accountViewController.getTags();
-  String dropdownValue = "No Filter";
+  //String dropdownValue = accountViewController.filterDropDownValue;
+  //    filterDropDownValue = filterText;
 
   @override
   Widget build(BuildContext context) {
+    //print("_TagDropdownButtonState");
     return Container(
         //padding: EdgeInsets.all(8),
         decoration: const BoxDecoration(
           color: Colors.white70,
         ),
         child: DropdownButton<String>(
-          value: dropdownValue,
+          value: accountViewController.filterDropDownValue,
           icon: const Icon(
             Icons.arrow_downward,
             color: Colors.black54,
@@ -742,8 +773,8 @@ class _TagDropdownButtonState extends State<TagDropdownButton> {
           onChanged: (String? value) {
             // This is called when the user selects an item.
             setState(() {
-              dropdownValue = value!;
-              accountViewController.filterAccountsByTag(dropdownValue);
+              accountViewController.filterDropDownValue = value!;
+              accountViewController.filterAccountsByTag(value);
             });
           },
           items: tags.map<DropdownMenuItem<String>>((String value) {

@@ -106,7 +106,7 @@ class AccountListView extends StatelessWidget {
             margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
             //color: Colors.amber,
             //padding: const EdgeInsets.all(4),
-            height: fieldHeight,
+            height: 60,
             child: getVerticalNameValue("Tags:", tagString)),
         Row(children: [
           Expanded(

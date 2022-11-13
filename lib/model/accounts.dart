@@ -102,12 +102,14 @@ class Accounts {
   void filterAccountsByTag(String tagSearch) {
     //print("filtering accounts by tag: $tagSearch");
     removeEmptyDisplayAccounts();
+    String lowerCaseTagSearch = tagSearch.toLowerCase();
     filterText = tagSearch;
     if (tagSearch == "No Filter") {
       displayedAccounts = accounts;
     } else {
-      displayedAccounts =
-          accounts.where((entry) => entry.tags.contains(tagSearch)).toList();
+      displayedAccounts = accounts
+          .where((entry) => entry.tags.contains(lowerCaseTagSearch))
+          .toList();
     }
     insertBlankDisplayedAccount();
     //notifyListeners();
