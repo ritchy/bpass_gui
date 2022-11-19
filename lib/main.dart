@@ -86,18 +86,18 @@ void setupWindow() async {
     Size size = await DesktopWindow.getWindowSize();
     stdout.writeln(size);
     //await DesktopWindow.setMaxWindowSize(Size(800, 800));
-    await DesktopWindow.setMinWindowSize(Size(440, 640));
-    await DesktopWindow.setWindowSize(Size(850, 640));
+    await DesktopWindow.setMinWindowSize(const Size(440, 640));
+    await DesktopWindow.setWindowSize(const Size(850, 640));
   }
 }
 
 Future testWindowFunctions() async {
   Size size = await DesktopWindow.getWindowSize();
   stdout.writeln(size);
-  await DesktopWindow.setWindowSize(Size(500, 500));
+  await DesktopWindow.setWindowSize(const Size(500, 500));
 
-  await DesktopWindow.setMinWindowSize(Size(400, 400));
-  await DesktopWindow.setMaxWindowSize(Size(800, 800));
+  await DesktopWindow.setMinWindowSize(const Size(400, 400));
+  await DesktopWindow.setMaxWindowSize(const Size(800, 800));
 
   await DesktopWindow.resetMaxWindowSize();
   await DesktopWindow.toggleFullScreen();
