@@ -7,87 +7,23 @@ class Accounts {
   File? file;
 
   List<AccountItem> accounts = [];
-  List<AccountItem> displayedAccounts = [];
   List<AccountItem> deletedAccounts = [];
-  //List<String> tags = ["tag1", "tag2"];
   List<String> tags = ['No Filter', 'Bank', 'Travel', 'Finance', 'Shopping'];
-  String filterText = "";
   final log = Logger('Accounts');
-
-  List<String> getTitleRows() {
-    List<String> titleRows = [];
-    displayedAccounts.forEach((element) => titleRows.add(element.name));
-    return titleRows;
-  }
-
-  String getAccountName(int index) {
-    if (index < displayedAccounts.length) {
-      return displayedAccounts[index].name;
-    } else {
-      print(
-          "why are we requeasting this index $index when the length is ${displayedAccounts.length}");
-      return "";
-    }
-  }
 
   int getNumberOfTags() {
     return tags.length;
   }
 
-  List<String> getAccountTags(int accountIndex) {
-    return displayedAccounts[accountIndex].tags;
-  }
-
   void addAccount(AccountItem item) {
+    //print("accounts adding account $item");
     if (item.status != AccountItem.DELETED) {
+      //removeEmptyDisplayAccounts();
       accounts.add(item);
+      //displayedAccounts = accounts;
     } else {
       deletedAccounts.add(item);
     }
-    //clearFilter();
-    //notifyListeners();
-  }
-
-  AccountItem getAccount(int index) {
-    return displayedAccounts[index];
-  }
-
-  void addBlankAccount() {
-    //print("adding blank account..");
-    var id = DateTime.now().millisecondsSinceEpoch;
-    addAccount(AccountItem("", id, "", "", "", "", "", "", "", [],
-        lastUpdated: DateTime.now()));
-  }
-
-  void insertBlankDisplayedAccount() {
-    var id = DateTime.now().millisecondsSinceEpoch;
-    //if (id > 1665347833394) {
-    //  return;
-    //}
-    displayedAccounts.insert(
-        0,
-        AccountItem("", id, "", "", "", "", "", "", "", [],
-            lastUpdated: DateTime.now()));
-  }
-
-  void clearFilter() {
-    removeEmptyDisplayAccounts();
-    filterText = "";
-    displayedAccounts = accounts;
-    insertBlankDisplayedAccount();
-    //notifyListeners();
-  }
-
-  void filterAccounts(String searchTerm) {
-    removeEmptyDisplayAccounts();
-    filterText = searchTerm;
-    if (searchTerm == "") {
-      displayedAccounts = accounts;
-    } else {
-      displayedAccounts = getFilteredList(searchTerm);
-    }
-    insertBlankDisplayedAccount();
-    //notifyListeners();
   }
 
   List<AccountItem> getFilteredList(String searchTerm) {
@@ -99,20 +35,16 @@ class Accounts {
         .toList();
   }
 
-  void filterAccountsByTag(String tagSearch) {
+  List<AccountItem> filterAccountsByTag(String tagSearch) {
     //print("filtering accounts by tag: $tagSearch");
-    removeEmptyDisplayAccounts();
     String lowerCaseTagSearch = tagSearch.toLowerCase();
-    filterText = tagSearch;
     if (tagSearch == "No Filter") {
-      displayedAccounts = accounts;
+      return accounts;
     } else {
-      displayedAccounts = accounts
+      return accounts
           .where((entry) => entry.tags.contains(lowerCaseTagSearch))
           .toList();
     }
-    insertBlankDisplayedAccount();
-    //notifyListeners();
   }
 
   List<AccountItem> getFilteredListByAccountName(String searchTerm) {
@@ -170,7 +102,6 @@ class Accounts {
         tags.add(tagValue);
       }
     }
-    //notifyListeners();
   }
 
   void setTags(int accountId, List<String> tags) {}
@@ -179,21 +110,10 @@ class Accounts {
     return accounts.length;
   }
 
-  int getNumberOfDisplayedAccounts() {
-    return displayedAccounts.length;
-  }
-
-  void removeEmptyDisplayAccounts() {
-    List<AccountItem> toRemove = [];
-    for (AccountItem account in displayedAccounts) {
-      if (account.isEmpty()) {
-        toRemove.add(account);
-      }
-    }
-    for (AccountItem account in toRemove) {
-      //print("removing empty ..");
-      displayedAccounts.remove(account);
-    }
+  List<AccountItem> getAccountListCopy() {
+    List<AccountItem> toReturn = [];
+    toReturn.addAll(accounts);
+    return toReturn;
   }
 
   void removeEmptyAccounts() {
@@ -215,19 +135,7 @@ class Accounts {
     //account.status = AccountItem.DELETED;
     log.info("moving account from active list to deleted list $account");
     deletedAccounts.add(account);
-
     int index = -1;
-    for (int i = 0; i < displayedAccounts.length; ++i) {
-      if (displayedAccounts[i].id == account.id) {
-        index = i;
-        break;
-      }
-    }
-    if (index > -1) {
-      displayedAccounts.removeAt(index);
-    }
-    //displayedAccounts.remove(account);
-    index = -1;
     for (int i = 0; i < accounts.length; ++i) {
       if (accounts[i].id == account.id) {
         index = i;
@@ -237,7 +145,6 @@ class Accounts {
     if (index > -1) {
       accounts.removeAt(index);
     }
-    //accounts.remove(account);
   }
 
   void markAccountAsDeleted(AccountItem account) {
@@ -253,7 +160,8 @@ class Accounts {
     this.file = file;
     log.info("loading from file: ${file.path}");
     var id = DateTime.now().millisecondsSinceEpoch;
-    accounts.add(AccountItem("", id, "", "", "", "", "", "", "", []));
+    //accounts.add(
+    //    AccountItem("", id, "", "", "", "", "", "", "", [], newAccount: true));
     //title_rows.add("");
     //file.openRead();
     String contents = file.readAsStringSync();
@@ -270,8 +178,6 @@ class Accounts {
       }
     }
     log.info("You currently have ${accounts.length} accounts");
-    displayedAccounts = accounts;
-    //notifyListeners();
   }
 
   AccountItem getAccountItemFromJsonEntry(var entry) {
@@ -479,7 +385,6 @@ class Accounts {
 
   Future<void> updateAccountFiles(GoogleService? googleService) async {
     print("saving ${accounts.length} accounts");
-    removeEmptyDisplayAccounts();
     removeEmptyAccounts();
     List combinedAccounts = [];
     combinedAccounts.addAll(accounts);
@@ -494,7 +399,6 @@ class Accounts {
       //print("Calling google.updateAccountFile()");
       await googleService.updateAccountFileInDrive(prettyprint);
     }
-    insertBlankDisplayedAccount();
   }
 }
 
@@ -513,14 +417,15 @@ class AccountItem {
   List<String> tags;
   static const String ACTIVE = "active";
   static const String DELETED = "deleted";
+  bool newAccount;
 
   AccountItem(this.name, this.id, this.username, this.password, this.hint,
       this.email, this.accountNumber, this.url, this.notes, this.tags,
-      {this.lastUpdated, this.status = "active"});
+      {this.lastUpdated, this.status = "active", this.newAccount = false});
 
   @override
   String toString() {
-    return "name: $name, username: $username, hint: $hint, email: $email, account number: $accountNumber, status $status, url: $url";
+    return "name: $name, username: $username, hint: $hint, email: $email, account number: $accountNumber, status $status, url: $url, new: $newAccount";
   }
 
   Map<String, dynamic> toJson() {

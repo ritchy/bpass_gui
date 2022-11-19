@@ -34,8 +34,7 @@ class AccountGridViewState extends State<AccountGridView> {
     }
     if (width < 380) {
       return ListView(
-          children: getChildrenCards(
-              accountViewController.accounts.displayedAccounts));
+          children: getChildrenCards(accountViewController.displayedAccounts));
     } else {
       return GridView.count(
         scrollDirection: Axis.vertical,
@@ -46,18 +45,23 @@ class AccountGridViewState extends State<AccountGridView> {
         crossAxisCount: axisCount,
         childAspectRatio: aspectRatio,
         // Generate 100 widgets that display their index in the List.
-        children:
-            getChildrenCards(accountViewController.accounts.displayedAccounts),
+        children: getChildrenCards(accountViewController.displayedAccounts),
       );
     }
   }
 
   List<Widget> getChildrenCards(var accounts) {
-    //log.info("Getting child cards...");
+    log.finer("getting new set of child cards to render ...");
     List<Widget> children = [];
+    //print(accounts[0]);
+    //add create new account card at the top
     for (AccountItem item in accounts) {
       //print("adding ${item.name}");
-      children.add(CardWidget(item, accountViewController));
+      if (item.newAccount) {
+        children.add(NewAccountWidget(accounts[0], accountViewController));
+      } else {
+        children.add(CardWidget(item, accountViewController));
+      }
     }
     return children;
   }
@@ -113,6 +117,42 @@ class CardWidget extends StatelessWidget {
               ],
             ),
             ****/
+          ],
+        ),
+      ),
+    ));
+  }
+}
+
+class NewAccountWidget extends StatelessWidget {
+  AccountViewController acccountViewController;
+  AccountItem item;
+  NewAccountWidget(this.item, this.acccountViewController, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+        child: Card(
+      //color: Colors.amber,
+      child: InkWell(
+        onTap: () {
+          log.info("tapped card item: $item");
+          accountViewController.selectNewAccount(item);
+        },
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              //leading: Icon(Icons.album),
+              title: const Text(overflow: TextOverflow.ellipsis, "New Account"),
+              subtitle: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: const <Widget>[
+                    Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text('tap here'))
+                  ]),
+            )
           ],
         ),
       ),

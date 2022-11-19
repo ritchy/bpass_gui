@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:password_manager/main.dart';
 import 'package:password_manager/service/google_api.dart';
 import 'package:password_manager/model/accounts.dart';
 import 'package:logging/logging.dart';
@@ -10,9 +9,11 @@ import 'package:password_manager/console.dart';
 class AccountViewController extends ChangeNotifier {
   Accounts accounts;
   AccountItem? currentlySelectedAccount;
+  List<AccountItem> displayedAccounts = [];
   String filterDropDownValue = "No Filter";
   bool showAccountCardView = false;
   bool showAccountEditCardView = false;
+  bool showAccountCreateView = false;
   bool showFilterViews = true;
   GoogleService? googleService;
   List outstandingRequests = [];
@@ -37,7 +38,13 @@ class AccountViewController extends ChangeNotifier {
 
   void loadFile(File file) {
     accounts.loadFile(file);
+    displayedAccounts = accounts.getAccountListCopy();
+    insertBlankDisplayedAccount();
     notifyListeners();
+  }
+
+  int getNumberOfDisplayedAccounts() {
+    return displayedAccounts.length;
   }
 
   void editSelectedAccount() {
@@ -50,6 +57,7 @@ class AccountViewController extends ChangeNotifier {
     showAccountCardView = false;
     showAccountEditCardView = false;
     currentlySelectedAccount = null;
+    sortByAccountName();
     notifyListeners();
   }
 
@@ -65,10 +73,32 @@ class AccountViewController extends ChangeNotifier {
     notifyListeners();
   }
 
+  void selectNewAccount(AccountItem account) {
+    currentlySelectedAccount = account;
+    showAccountCreateView = true;
+    notifyListeners();
+  }
+
   void updateCurrentlySelectedAccount() {
     AccountItem? item = currentlySelectedAccount;
     if (item != null) {
       accounts.updateAccountItem(item);
+      displayedAccounts = accounts.getAccountListCopy();
+    }
+    clearFilter();
+    notifyListeners();
+  }
+
+  void removeEmptyDisplayAccounts() {
+    List<AccountItem> toRemove = [];
+    for (AccountItem account in displayedAccounts) {
+      if (account.isEmpty()) {
+        toRemove.add(account);
+      }
+    }
+    for (AccountItem account in toRemove) {
+      //print("removing empty ..");
+      displayedAccounts.remove(account);
     }
   }
 
@@ -81,26 +111,47 @@ class AccountViewController extends ChangeNotifier {
     }
   }
 
+  void insertBlankDisplayedAccount() {
+    var id = DateTime.now().millisecondsSinceEpoch;
+    displayedAccounts.insert(
+        0,
+        AccountItem("", id, "", "", "", "", "", "", "", [],
+            lastUpdated: DateTime.now(), newAccount: true));
+  }
+
   void updateAccountItem(AccountItem item) {
     print('updating $item');
     accounts.updateAccountItem(item);
+    displayedAccounts = accounts.getAccountListCopy();
+    insertBlankDisplayedAccount();
+    notifyListeners();
   }
 
   Future<void> updateAccountFiles() async {
+    //removeEmptyDisplayAccounts();
     await accounts.updateAccountFiles(googleService);
+    //insertBlankDisplayedAccount();
     notifyListeners();
   }
 
   AccountItem getAccountByIndex(int index) {
-    return accounts.getAccount(index);
+    if (displayedAccounts.length > index) {
+      return displayedAccounts[index];
+    } else {
+      return displayedAccounts.first;
+    }
   }
 
   List<String> getAccountTagsByIndex(int accountIndex) {
-    return accounts.getAccountTags(accountIndex);
+    if (displayedAccounts.length > accountIndex) {
+      return displayedAccounts[accountIndex].tags;
+    } else {
+      return [];
+    }
   }
 
   void saveChanges() async {
-    accounts.removeEmptyDisplayAccounts();
+    removeEmptyDisplayAccounts();
     accounts.removeEmptyAccounts();
     log.info("saving ${changes.length} changes");
     for (ChangeItem item in changes) {
@@ -108,8 +159,9 @@ class AccountViewController extends ChangeNotifier {
       updateFieldById(item.accountId, item.fieldIndex, item.value);
     }
     changes = [];
-    accounts.insertBlankDisplayedAccount();
-    //notifyListeners();
+    displayedAccounts = accounts.getAccountListCopy();
+    insertBlankDisplayedAccount();
+    notifyListeners();
   }
 
   Future<void> reconcileGoogleAccountFileOld(
@@ -318,10 +370,14 @@ class AccountViewController extends ChangeNotifier {
     }
   }
 
+  void sortByAccountName({bool sortAscending = true}) {
+    sortByColumnNumber(-1, sortAscending);
+  }
+
   void sortByColumnNumber(int columnNumber, bool sortAscending) {
     //log.info("sorting by column $columnNumber and ascending $sortAscending...");
-    List<AccountItem> displayedAccounts = accounts.displayedAccounts;
-    accounts.removeEmptyDisplayAccounts();
+    removeEmptyDisplayAccounts();
+    //List<AccountItem> displayedAccounts = accounts.displayedAccounts;
     if (columnNumber == -1) {
       displayedAccounts.sort((accountOne, accountTwo) => accountOne.name
           .toLowerCase()
@@ -352,13 +408,12 @@ class AccountViewController extends ChangeNotifier {
     if (!sortAscending) {
       displayedAccounts = displayedAccounts.reversed.toList();
     }
-    accounts.displayedAccounts = displayedAccounts;
-    accounts.insertBlankDisplayedAccount();
+    insertBlankDisplayedAccount();
     notifyListeners();
   }
 
   String getFieldValue(int accountIndex, int fieldIndex) {
-    List<AccountItem> displayedAccounts = accounts.displayedAccounts;
+    //List<AccountItem> displayedAccounts = accounts.displayedAccounts;
 
     if (fieldIndex == -1) {
       return displayedAccounts[accountIndex].name;
@@ -379,7 +434,7 @@ class AccountViewController extends ChangeNotifier {
     } else if (fieldIndex == 7) {
       String tagValue = "";
       for (String t in displayedAccounts[accountIndex].tags) {
-        tagValue = tagValue + " " + t;
+        tagValue = "$tagValue $t";
       }
       return tagValue;
     } else {
@@ -469,39 +524,65 @@ class AccountViewController extends ChangeNotifier {
     if (updated) {
       account.lastUpdated = DateTime.now();
     }
+    displayedAccounts = accounts.getAccountListCopy();
     notifyListeners();
     return updated;
   }
 
   void updateName(int index, String name) {
-    AccountItem account = accounts.displayedAccounts[index];
+    AccountItem account = displayedAccounts[index];
     updateFieldById(account.id, -1, name);
+  }
+
+  void filterAccounts(String searchTerm) {
+    removeEmptyDisplayAccounts();
+    if (searchTerm == "") {
+      displayedAccounts = accounts.accounts;
+    } else {
+      displayedAccounts = accounts.getFilteredList(searchTerm);
+    }
+    sortByAccountName();
+    notifyListeners();
   }
 
   void clearFilter() {
     filterDropDownValue = "No Filter";
-    accounts.clearFilter();
-    notifyListeners();
-  }
-
-  void filterAccounts(String searchTerm) {
-    accounts.filterAccounts(searchTerm);
+    displayedAccounts = accounts.getAccountListCopy();
+    sortByAccountName();
+    insertBlankDisplayedAccount();
     notifyListeners();
   }
 
   void filterAccountsByTag(String tagSearch) {
-    accounts.filterAccountsByTag(tagSearch);
+    displayedAccounts = accounts.filterAccountsByTag(tagSearch);
+    sortByAccountName();
     notifyListeners();
   }
 
   void addAccount(AccountItem item) {
+    //print("controller adding account $item");
+    item.newAccount = false;
+    //print("Before add ${accounts.accounts.length}");
+    //item.lastUpdated = DateTime.now();
     accounts.addAccount(item);
+    //print("after add ${accounts.accounts.length}");
+    displayedAccounts = accounts.getAccountListCopy();
+    sortByAccountName();
+    //accounts.insertBlankDisplayedAccount();
     notifyListeners();
   }
 
   void addTag(List<String> newTags) {
     accounts.addTag(newTags);
     notifyListeners();
+  }
+
+  List<String> getTitleRows() {
+    List<String> titleRows = [];
+    for (var element in displayedAccounts) {
+      titleRows.add(element.name);
+    }
+    return titleRows;
   }
 
   List<String> getTitleColumns() {

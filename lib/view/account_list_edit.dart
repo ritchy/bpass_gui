@@ -16,7 +16,10 @@ class AccountListEditView extends StatelessWidget {
     double windowWidth = MediaQuery.of(context).size.width;
     List<String> tags = (item.tags.isEmpty) ? [] : item.tags;
     String tagString = tags.join(', ');
-    String accountNameFirstChar = item.name[0];
+    String accountNameFirstChar = "";
+    if (item.name.isNotEmpty) {
+      accountNameFirstChar = item.name[0];
+    }
 
     return Expanded(
         //height: windowHeight - 510,
@@ -109,7 +112,7 @@ class AccountListEditView extends StatelessWidget {
             child: getTextWidget("Web URL", item.url,
                 multiLine: true,
                 maxLines: 2,
-                onChanged: (value) => item.accountNumber = value)),
+                onChanged: (value) => item.url = value)),
 
         //onSubmit: (value) => print("${item.url} -> $value"))),
         Container(
@@ -133,9 +136,14 @@ class AccountListEditView extends StatelessWidget {
             TextButton(
                 child: const Text('Save'),
                 onPressed: () {
+                  log.info("saving account $item");
                   //accountViewController.editSelectedAccount();
                   //accountViewController.updateCurrentlySelectedAccount();
-                  if (accountViewController.itemDifferent(item)) {
+                  if (item.newAccount) {
+                    accountViewController.addAccount(item);
+                    accountViewController.updateAccountFiles();
+                    accountViewController.clearSelectedAccount();
+                  } else if (accountViewController.itemDifferent(item)) {
                     accountViewController.updateAccountItem(item);
                     accountViewController.updateAccountFiles();
                     accountViewController.clearSelectedAccount();

@@ -11,8 +11,8 @@ import 'package:password_manager/view/autocomplete_label.dart';
 import 'package:logging/logging.dart';
 import 'package:flutter/services.dart';
 
-import 'account_card_edit.dart';
-import 'account_card_view.dart';
+//import 'account_card_edit.dart';
+//import 'account_card_view.dart';
 import 'account_grid_view.dart';
 import 'account_list_edit.dart';
 import 'account_list_view.dart';
@@ -302,7 +302,6 @@ class AccountsPageState extends State<AccountsPage> {
   Widget getRowTitleWidget(int rowNumber) {
     String accountName =
         accountViewController.getAccountByIndex(rowNumber).name;
-    //String accountName = accounts.getAccountName(i);
     if (rowNumber == 0) {
       accountName = ">New Entry<";
     }
@@ -464,7 +463,7 @@ class AccountsPageState extends State<AccountsPage> {
   Widget getTable() {
     return StickyHeadersTable(
       columnsLength: accountViewController.getNumberOfAccountFields(),
-      rowsLength: accountViewController.accounts.getNumberOfDisplayedAccounts(),
+      rowsLength: accountViewController.getNumberOfDisplayedAccounts(),
       columnsTitleBuilder: (i) => TextButton(
         child: Text(accountViewController.getTitleColumnValue(i)),
         onPressed: () => handleColumnClick(i),
@@ -487,7 +486,8 @@ class AccountsPageState extends State<AccountsPage> {
   Widget getMainStageWidget() {
     AccountItem? currentAccount =
         accountViewController.currentlySelectedAccount;
-    if (accountViewController.showAccountEditCardView &&
+    if ((accountViewController.showAccountEditCardView ||
+            accountViewController.showAccountCreateView) &&
         currentAccount != null) {
       //return AccountEditCardView(currentAccount);
       //setState(() {
@@ -600,7 +600,7 @@ class AccountsPageState extends State<AccountsPage> {
   }
 
   void testAlert(BuildContext context) {
-    var alert = AlertDialog(
+    var alert = const AlertDialog(
       title: Text("Test"),
       content: Text("Done..!"),
     );
@@ -618,10 +618,10 @@ class AccountsPageState extends State<AccountsPage> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('AlertDialog Title'),
+          title: const Text('AlertDialog Title'),
           content: SingleChildScrollView(
             child: Column(
-              children: <Widget>[
+              children: const <Widget>[
                 Text('This is a demo alert dialog.'),
                 Text('Would you like to confirm this message?'),
               ],
@@ -629,14 +629,14 @@ class AccountsPageState extends State<AccountsPage> {
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Confirm'),
+              child: const Text('Confirm'),
               onPressed: () {
                 print('Confirmed');
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -659,9 +659,9 @@ class AccountsPageState extends State<AccountsPage> {
     );
 
     // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: const Text("Account Access Request"),
-      content: const Text("Access Request, would you like to approve?"),
+    AlertDialog alert = const AlertDialog(
+      title: Text("Account Access Request"),
+      content: Text("Access Request, would you like to approve?"),
       actions: [],
     );
     // show the dialog
@@ -677,7 +677,11 @@ class AccountsPageState extends State<AccountsPage> {
 class _FilterSearch extends StatelessWidget {
   void updateFilter(String filterText) {
     log.finer("updating filter to $filterText");
-    accountViewController.filterAccounts(filterText);
+    if (filterText.isEmpty || filterText.trim().isEmpty) {
+      accountViewController.clearFilter();
+    } else {
+      accountViewController.filterAccounts(filterText);
+    }
   }
 
   @override
