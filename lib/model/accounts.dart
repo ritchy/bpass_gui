@@ -18,9 +18,7 @@ class Accounts {
   void addAccount(AccountItem item) {
     //print("accounts adding account $item");
     if (item.status != AccountItem.DELETED) {
-      //removeEmptyDisplayAccounts();
       accounts.add(item);
-      //displayedAccounts = accounts;
     } else {
       deletedAccounts.add(item);
     }

@@ -57,6 +57,7 @@ class AccountViewController extends ChangeNotifier {
     showAccountCardView = false;
     showAccountEditCardView = false;
     currentlySelectedAccount = null;
+    clearFilter();
     sortByAccountName();
     notifyListeners();
   }
@@ -549,7 +550,7 @@ class AccountViewController extends ChangeNotifier {
     filterDropDownValue = "No Filter";
     displayedAccounts = accounts.getAccountListCopy();
     sortByAccountName();
-    insertBlankDisplayedAccount();
+    //insertBlankDisplayedAccount();
     notifyListeners();
   }
 
