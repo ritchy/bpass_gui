@@ -69,6 +69,20 @@ dependencies:
   pointycastle: ^3.6.2
   encrypt: ^5.0.1
 
+
+## Building for Testflight
+
+bump up version/build number in pubspec.yaml
+flutter build ipa
+Upload (build/ios/ipa/*.ipa) via Transporter (https://apps.apple.com/us/app/transporter/id1450874784?mt=12)
+Head to app store connect https://appstoreconnect.apple.com/
+Go to "builds" and complete encryption delcaration ("missing compliance" warning)
+Open up TestFlight and update/install
+
+
+
+
+
 ## Requesting access to share google Drive file
 
 access.json
