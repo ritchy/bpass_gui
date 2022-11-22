@@ -40,8 +40,7 @@ class AccountGridViewState extends State<AccountGridView> {
         scrollDirection: Axis.vertical,
         mainAxisSpacing: 2,
         crossAxisSpacing: 2,
-        // Create a grid with 2 columns. If you change the scrollDirection to
-        // horizontal, this produces 2 rows.
+        padding: const EdgeInsets.all(10),
         crossAxisCount: axisCount,
         childAspectRatio: aspectRatio,
         // Generate 100 widgets that display their index in the List.
@@ -94,10 +93,16 @@ class CardWidget extends StatelessWidget {
                   children: <Widget>[
                     Align(
                         alignment: Alignment.centerLeft,
-                        child: Text(item.username)),
+                        child: Text(
+                          item.username,
+                          overflow: TextOverflow.ellipsis,
+                        )),
                     Align(
                         alignment: Alignment.centerLeft,
-                        child: Text('hint: ${item.hint}'))
+                        child: Text(
+                          'hint: ${item.hint}',
+                          overflow: TextOverflow.ellipsis,
+                        ))
                   ]),
             )
             /**** ,
@@ -150,7 +155,8 @@ class NewAccountWidget extends StatelessWidget {
                   children: const <Widget>[
                     Align(
                         alignment: Alignment.centerLeft,
-                        child: Text('tap here'))
+                        child: Text('tap here')),
+                    Align(alignment: Alignment.centerLeft, child: Text(''))
                   ]),
             )
           ],

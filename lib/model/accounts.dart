@@ -8,7 +8,7 @@ class Accounts {
 
   List<AccountItem> accounts = [];
   List<AccountItem> deletedAccounts = [];
-  List<String> tags = ['No Filter', 'Bank', 'Travel', 'Finance', 'Shopping'];
+  List<String> tags = ['bank', 'travel', 'finance', 'work', 'shopping'];
   final log = Logger('Accounts');
 
   int getNumberOfTags() {
@@ -36,7 +36,7 @@ class Accounts {
   List<AccountItem> filterAccountsByTag(String tagSearch) {
     //print("filtering accounts by tag: $tagSearch");
     String lowerCaseTagSearch = tagSearch.toLowerCase();
-    if (tagSearch == "No Filter") {
+    if (tagSearch == "no tags") {
       return accounts;
     } else {
       return accounts
@@ -88,7 +88,7 @@ class Accounts {
   List<String> getTags() {
     //print("getTags: $tags");
     if (tags.isEmpty) {
-      return ["Empty"];
+      return ["empty"];
     } else {
       return tags.toSet().toList();
     }
@@ -96,8 +96,9 @@ class Accounts {
 
   void addTag(List<String> newTags) {
     for (String tagValue in newTags) {
-      if (!tags.contains(tagValue)) {
-        tags.add(tagValue);
+      String lowerCase = tagValue.toLowerCase();
+      if (!tags.contains(lowerCase)) {
+        tags.add(lowerCase);
       }
     }
   }

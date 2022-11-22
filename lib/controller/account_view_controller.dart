@@ -9,8 +9,9 @@ import 'package:password_manager/console.dart';
 class AccountViewController extends ChangeNotifier {
   Accounts accounts;
   AccountItem? currentlySelectedAccount;
+  String? currentTagSelection;
   List<AccountItem> displayedAccounts = [];
-  String filterDropDownValue = "No Filter";
+  String filterDropDownValue = "no tags";
   bool showAccountCardView = false;
   bool showAccountEditCardView = false;
   bool showAccountCreateView = false;
@@ -547,7 +548,7 @@ class AccountViewController extends ChangeNotifier {
   }
 
   void clearFilter() {
-    filterDropDownValue = "No Filter";
+    filterDropDownValue = "no tags";
     displayedAccounts = accounts.getAccountListCopy();
     sortByAccountName();
     //insertBlankDisplayedAccount();
@@ -555,6 +556,7 @@ class AccountViewController extends ChangeNotifier {
   }
 
   void filterAccountsByTag(String tagSearch) {
+    currentTagSelection = tagSearch;
     displayedAccounts = accounts.filterAccountsByTag(tagSearch);
     sortByAccountName();
     notifyListeners();
@@ -599,7 +601,14 @@ class AccountViewController extends ChangeNotifier {
   }
 
   List<String> getTags() {
-    return accounts.getTags();
+    List<String> toReturn = accounts.getTags();
+    //print("got tags ..$toReturn");
+    if ((currentTagSelection != null) && currentTagSelection != "no tags") {
+      toReturn.insert(0, "no tags");
+    } else {
+      toReturn.insert(0, "no tags");
+    }
+    return toReturn;
   }
 
   void addChangeItem(ChangeItem change) {

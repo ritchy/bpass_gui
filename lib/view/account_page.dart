@@ -3,6 +3,7 @@ import 'package:password_manager/main.dart';
 import 'package:password_manager/service/google_api.dart';
 import 'package:password_manager/service/google_service_notifier.dart';
 import 'package:password_manager/controller/account_view_controller.dart';
+import 'package:password_manager/view/tool_tab.dart';
 import 'package:table_sticky_headers/table_sticky_headers.dart';
 import 'package:password_manager/model/accounts.dart';
 import 'package:provider/provider.dart';
@@ -11,8 +12,6 @@ import 'package:password_manager/view/autocomplete_label.dart';
 import 'package:logging/logging.dart';
 import 'package:flutter/services.dart';
 
-//import 'account_card_edit.dart';
-//import 'account_card_view.dart';
 import 'account_grid_view.dart';
 import 'account_list_edit.dart';
 import 'account_list_view.dart';
@@ -31,8 +30,6 @@ class AccountsPageState extends State<AccountsPage> {
   bool sortAscending = true;
   bool autoSelectColumn = false;
   bool showGridView = true;
-  //bool showFilterViews = true;
-  //String filterDropDownValue = "No Filter";
 
   final log = Logger('_AccountsPageState');
   AccountsPageState();
@@ -89,23 +86,18 @@ class AccountsPageState extends State<AccountsPage> {
   }
 
   Future<void> handleGoogleDriveLogin() async {
-    //accountViewController.googleService = googleServiceNotifier.googleService;
     await googleServiceNotifier.handleGoogleDriveLogin();
     accountViewController.googleService = googleServiceNotifier.googleService;
     log.fine(
         "should have google service, do we? ${accountViewController.googleService}");
     await accountViewController
         .reconcileGoogleAccountFile(googleServiceNotifier.googleService);
-    //await accountViewController
-    //    .reconcileAccessRequests(googleServiceNotifier.googleService);
     await accountViewController.refreshAccessRequestList();
-    //setState(() {
-    //outstandingRequests = requests;
-    //});
-    //log.info("loggedin? ${googleServiceNotifier.loggedIntoGoogle}");
   }
 
-  void cancelGoogleDriveLogin() {}
+  Future<void> cancelGoogleDriveLogin() async {
+    await googleServiceNotifier.handleGoogleDriveLogout();
+  }
 
   Future<void> handleDenyResponse() async {
     await googleServiceNotifier.handleDenyResponse();
@@ -113,17 +105,11 @@ class AccountsPageState extends State<AccountsPage> {
 
   Future<void> handleGoogleDriveLogout() async {
     log.info("Logging out ...");
-    setState(() {
-      //loggedIntoGoogle = false;
-    });
     await googleServiceNotifier.handleGoogleDriveLogout();
-    //googleServiceNotifier.googleService?.googleLogout();
-    //googleServiceNotifier.loggedIntoGoogle = false;
-    //reconcileGoogleAccountFile();
   }
 
   Widget getRequestAccessDialog() {
-    //log.info("getRequestAccessDialog()");
+    log.finest("getRequestAccessDialog()");
     int x = 1;
     if (accountViewController.promptToShowDeniedAccess) {
       return SimpleDialog(
@@ -233,19 +219,24 @@ class AccountsPageState extends State<AccountsPage> {
     return Visibility(
         visible: showFilterViews,
         child: Row(children: [
-          TextButton(
-            onPressed: clearState,
-            child: _FilterSearch(),
-            //onPressed: () => Navigator.pushNamed(context, '/accounts'),
-          ),
-          const Text(
-            "Tags: ",
-            style:
-                TextStyle(fontWeight: FontWeight.bold, color: Colors.white70),
-          ),
-          const SizedBox(
+          Container(
+              //color: Colors.amber,
+              height: 55,
+              child: TextButton(
+                onPressed: clearState,
+                child: _FilterSearch(),
+                //onPressed: () => Navigator.pushNamed(context, '/accounts'),
+              )),
+          //const Text(
+          //  "Tags: ",
+          //  style:
+          //      TextStyle(fontWeight: FontWeight.bold, color: Colors.white70),
+          //),
+          Container(
             //width: 100.0,
-            height: 35,
+            //color: Colors.amber,
+            padding: EdgeInsets.all(2),
+            height: 37,
             child: TagDropdownButton(),
           ),
         ]));
@@ -273,14 +264,14 @@ class AccountsPageState extends State<AccountsPage> {
             Expanded(
               child: Container(),
             ),
-            getGoogleDriveWidget(),
-            const Padding(
-                padding: EdgeInsets.all(
-                    4)), // This trailing comma makes auto-formatting nicer for build methods.
+            Container(
+                //color: Colors.amber,
+                alignment: Alignment.centerRight,
+                child: getGoogleDriveWidget()),
             IconButton(
               //Icons.list_rounded,
               iconSize: 55,
-              alignment: Alignment.topCenter,
+              alignment: Alignment.center,
               onPressed: () {
                 setState(() {
                   showGridView = !showGridView;
@@ -288,13 +279,10 @@ class AccountsPageState extends State<AccountsPage> {
                   accountViewController.showFilterViews = false;
                 });
               },
-              padding: const EdgeInsets.all(4.0),
+              padding: const EdgeInsets.fromLTRB(2, 2, 2, 2),
               icon: displayIcon,
               color: Colors.white70,
             ),
-            const Padding(
-                padding: EdgeInsets.all(
-                    4)), // This trailing comma makes auto-formatting nicer for build methods.
           ],
         ));
   }
@@ -320,7 +308,7 @@ class AccountsPageState extends State<AccountsPage> {
     if (googleServiceNotifier.loggedIntoGoogle) {
       //reconcileGoogleAccountFile();
       return SizedBox(
-          height: 50,
+          height: 45,
           child: FloatingActionButton(
             backgroundColor: Colors.white70,
             onPressed: () => handleGoogleDriveLogout(),
@@ -333,7 +321,7 @@ class AccountsPageState extends State<AccountsPage> {
           ));
     } else if (googleServiceNotifier.processingGoogleFile) {
       return SizedBox(
-          height: 50,
+          height: 45,
           child: FloatingActionButton(
             backgroundColor: Colors.white70,
             onPressed: () => cancelGoogleDriveLogin(),
@@ -344,7 +332,7 @@ class AccountsPageState extends State<AccountsPage> {
           ));
     } else {
       return SizedBox(
-          height: 50,
+          height: 45,
           child: FloatingActionButton(
             backgroundColor: Colors.white70,
             onPressed: () => handleGoogleDriveLogin(),
@@ -436,10 +424,6 @@ class AccountsPageState extends State<AccountsPage> {
         } else {
           log.info("no account selected, can't update changes");
         }
-        //accounts.updateField(j, i, value);
-        //selectedAccount? = accounts.getAccount(i);
-        //log.info(
-        //    "changed $value for $selectedRow: $selectedColumn:  $selectedAccount");
       },
       onSubmitted: (String value) {
         if (value != accountViewController.getFieldValue(rowNumber, i)) {
@@ -567,9 +551,8 @@ class AccountsPageState extends State<AccountsPage> {
     var googleServiceNotifier = context.watch<GoogleServiceNotifier>();
     //var googleService = context.watch<GoogleService>();
 
-    //log.info("build()");
+    //log.finest("build()");
 
-    //TextEditingController nameController = TextEditingController();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: {
@@ -580,22 +563,25 @@ class AccountsPageState extends State<AccountsPage> {
             ),
       },
       home: Scaffold(
-          resizeToAvoidBottomInset: true,
-          appBar: AppBar(
-            title: const Text(
-              'Accounts',
-              maxLines: 2,
-            ),
-            backgroundColor: Colors.black54, //Colors.amber,
-          ),
-          body: Column(children: <Widget>[
-            getRequestAccessDialog(),
-            getRequestDialog(),
-            getWidgetRow(),
-            getMainStageWidget(),
-            //Expanded(child: getTable()),
-            //const Expanded(child: AccountGridView()),
-          ])),
+        resizeToAvoidBottomInset: true,
+        appBar: AppBar(
+          //title: const Text(
+          //  'Accounts',
+          //  maxLines: 1,
+          //),
+          toolbarHeight: 20.0,
+          //bottom: ToolTab(googleServiceNotifier),
+          backgroundColor: Colors.black45, //Colors.amber,
+        ),
+        body: Column(children: <Widget>[
+          getRequestAccessDialog(),
+          getRequestDialog(),
+          getWidgetRow(),
+          getMainStageWidget(),
+          //Expanded(child: getTable()),
+          //const Expanded(child: AccountGridView()),
+        ]),
+      ),
     );
   }
 
@@ -702,7 +688,7 @@ class _FilterSearch extends StatelessWidget {
                   filled: true,
                   fillColor: Colors.white70,
                   contentPadding: EdgeInsets.all(5.0),
-                  labelText: 'Filter',
+                  labelText: 'filter',
                 ))));
   }
 }
@@ -757,8 +743,19 @@ class _TagDropdownButtonState extends State<TagDropdownButton> {
   @override
   Widget build(BuildContext context) {
     //print("_TagDropdownButtonState");
+    //print("Tags $tags");
+    if (tags.isEmpty) {
+      tags = ["none"];
+    }
+
+    if (accountViewController.filterDropDownValue.isEmpty) {
+      accountViewController.filterDropDownValue = "no tags";
+    }
+
     return Container(
         //padding: EdgeInsets.all(8),
+        //height: 35,
+        //width: 100,
         decoration: const BoxDecoration(
           color: Colors.white70,
         ),
@@ -775,6 +772,7 @@ class _TagDropdownButtonState extends State<TagDropdownButton> {
           //  color: Colors.white70,
           //),
           onChanged: (String? value) {
+            log.fine("selecting value $value");
             // This is called when the user selects an item.
             setState(() {
               accountViewController.filterDropDownValue = value!;
@@ -782,6 +780,10 @@ class _TagDropdownButtonState extends State<TagDropdownButton> {
             });
           },
           items: tags.map<DropdownMenuItem<String>>((String value) {
+            String toShow = value;
+            if (value.isNotEmpty && value.length > 15) {
+              toShow = "${value.substring(0, 12)} ...";
+            }
             return DropdownMenuItem<String>(
                 value: value,
                 child: Container(
@@ -790,9 +792,11 @@ class _TagDropdownButtonState extends State<TagDropdownButton> {
                   //  color: Colors.white,
                   //),
                   child: Text(
-                    value,
+                    toShow, //.substring(0, 4),
+                    //softWrap: true,
+                    overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.black54),
+                        fontWeight: FontWeight.normal, color: Colors.black54),
                   ),
                 ));
           }).toList(),
