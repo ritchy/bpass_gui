@@ -16,7 +16,7 @@ class AccountListView extends StatelessWidget {
     double windowWidth = MediaQuery.of(context).size.width;
     List<String> tags = (item.tags.isEmpty) ? [] : item.tags;
     String tagString = tags.join(', ');
-    String accountNameFirstChar = item.name[0];
+    String accountNameFirstChar = item.name.isEmpty ? "" : item.name[0];
     bool vertical = windowWidth < 600;
     double fieldHeight = 30;
     if (vertical) {
@@ -35,16 +35,18 @@ class AccountListView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  CircleAvatar(
-                      radius: 40,
-                      backgroundColor: Colors.blue.shade900,
-                      child: Text(accountNameFirstChar,
-                          style: const TextStyle(
-                              fontSize: 52, fontWeight: FontWeight.bold))),
+                  Container(
+                      padding: const EdgeInsets.all(5),
+                      child: CircleAvatar(
+                          radius: 40,
+                          backgroundColor: Colors.blue.shade900,
+                          child: Text(accountNameFirstChar,
+                              style: const TextStyle(
+                                  fontSize: 52, fontWeight: FontWeight.bold)))),
                   SizedBox(
                       width: windowWidth - 100,
                       child: Container(
-                          padding: const EdgeInsets.all(5.0),
+                          padding: const EdgeInsets.fromLTRB(12, 5, 5, 5),
                           child: Text(
                               //overflow: TextOverflow.clip,
                               //overflow: TextOverflow.ellipsis,
