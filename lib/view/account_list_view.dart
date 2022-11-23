@@ -14,8 +14,6 @@ class AccountListView extends StatelessWidget {
   Widget build(BuildContext context) {
     double windowHeight = MediaQuery.of(context).size.height;
     double windowWidth = MediaQuery.of(context).size.width;
-    List<String> tags = (item.tags.isEmpty) ? [] : item.tags;
-    String tagString = tags.join(', ');
     String accountNameFirstChar = item.name.isEmpty ? "" : item.name[0];
     bool vertical = windowWidth < 600;
     double fieldHeight = 30;
@@ -36,7 +34,7 @@ class AccountListView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Container(
-                      padding: const EdgeInsets.all(5),
+                      padding: const EdgeInsets.fromLTRB(3, 5, 5, 5),
                       child: CircleAvatar(
                           radius: 40,
                           backgroundColor: Colors.blue.shade900,
@@ -44,9 +42,10 @@ class AccountListView extends StatelessWidget {
                               style: const TextStyle(
                                   fontSize: 52, fontWeight: FontWeight.bold)))),
                   SizedBox(
-                      width: windowWidth - 100,
+                      width: windowWidth,
                       child: Container(
-                          padding: const EdgeInsets.fromLTRB(12, 5, 5, 5),
+                          //color: Colors.amber,
+                          padding: const EdgeInsets.fromLTRB(10, 5, 5, 5),
                           child: Text(
                               //overflow: TextOverflow.clip,
                               //overflow: TextOverflow.ellipsis,
@@ -104,29 +103,8 @@ class AccountListView extends StatelessWidget {
                       child: getNameValue(
                           "Account Number:", item.accountNumber, vertical)))
             ])),
-        Container(
-            margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-            //color: Colors.amber,
-            //padding: const EdgeInsets.all(4),
-            height: 60,
-            child: getVerticalNameValue("Tags:", tagString)),
-        Row(children: [
-          Expanded(
-              child: Container(
-                  margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  //color: Colors.amber,
-                  //padding: const EdgeInsets.all(4),
-                  height: 60,
-                  child: getVerticalNameValue("Web URL:", item.url))),
-
-          //onSubmit: (value) => print("${item.url} -> $value"))),
-          Expanded(
-              child: Container(
-                  margin: const EdgeInsets.all(10),
-                  //padding: const EdgeInsets.all(4),
-                  height: 60,
-                  child: getVerticalNameValue("Notes:", item.notes)))
-        ]),
+        //getBottomSection(windowWidth),
+        getBottomSection(vertical),
         Container(
             margin: const EdgeInsets.fromLTRB(10, 0, 40, 0),
             child: Row(
@@ -148,6 +126,56 @@ class AccountListView extends StatelessWidget {
             )),
       ],
     ));
+  }
+
+  Widget getBottomSection(vertical) {
+    List<String> tags = (item.tags.isEmpty) ? [] : item.tags;
+    String tagString = tags.join(', ');
+
+    return Container(
+        height: 180,
+        margin: const EdgeInsets.all(10),
+        //padding: const EdgeInsets.all(4),
+        child: Row(children: [
+          Expanded(
+              child: Container(
+                  //color: Colors.amber,
+                  padding: const EdgeInsets.fromLTRB(2, 0, 5, 0),
+                  child: Column(children: [
+                    getVerticalNameValue("Web URL:", item.url),
+                    getVerticalNameValue("Tags:", tagString),
+                  ]))),
+          Expanded(
+              child: Container(
+                  padding: const EdgeInsets.fromLTRB(2, 0, 5, 0),
+                  child: Column(children: [
+                    Container(
+                      alignment: Alignment.topLeft,
+                      height: 30,
+                      //padding: const EdgeInsets.all(2),
+                      margin: const EdgeInsets.all(2),
+                      padding: const EdgeInsets.fromLTRB(2, 2, 2, 5),
+                      child: Text("Notes:",
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                              fontSize: 12,
+                              //backgroundColor: Colors.amber,
+                              fontWeight: FontWeight.bold)),
+                    ),
+                    Container(
+                        height: 120,
+                        //width: 100,
+                        padding: const EdgeInsets.fromLTRB(4, 2, 2, 0),
+                        alignment: Alignment.topLeft,
+                        //color: Colors.amber,
+                        child: SingleChildScrollView(
+                            scrollDirection: Axis.vertical,
+                            child: Text(
+                              item.notes,
+                              overflow: TextOverflow.ellipsis,
+                            )))
+                  ]))),
+        ]));
   }
 
   Widget getNameValue(String name, String value, bool vertical) {
@@ -191,6 +219,7 @@ class AccountListView extends StatelessWidget {
     return Container(
         padding: const EdgeInsets.all(2),
         margin: const EdgeInsets.all(2),
+        height: 60,
         //decoration:
         //    BoxDecoration(border: Border.all(width: 2, color: Colors.black38)),
         child: Column(
