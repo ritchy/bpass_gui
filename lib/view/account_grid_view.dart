@@ -36,16 +36,18 @@ class AccountGridViewState extends State<AccountGridView> {
       return ListView(
           children: getChildrenCards(accountViewController.displayedAccounts));
     } else {
-      return GridView.count(
-        scrollDirection: Axis.vertical,
-        mainAxisSpacing: 2,
-        crossAxisSpacing: 2,
-        padding: const EdgeInsets.all(10),
-        crossAxisCount: axisCount,
-        childAspectRatio: aspectRatio,
-        // Generate 100 widgets that display their index in the List.
-        children: getChildrenCards(accountViewController.displayedAccounts),
-      );
+      return Container(
+          color: Color.fromARGB(255, 223, 223, 223),
+          child: GridView.count(
+            scrollDirection: Axis.vertical,
+            mainAxisSpacing: 2,
+            crossAxisSpacing: 2,
+            padding: const EdgeInsets.all(10),
+            crossAxisCount: axisCount,
+            childAspectRatio: aspectRatio,
+            // Generate 100 widgets that display their index in the List.
+            children: getChildrenCards(accountViewController.displayedAccounts),
+          ));
     }
   }
 
