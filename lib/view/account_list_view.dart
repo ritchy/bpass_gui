@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:googleapis/cloudbuild/v1.dart';
 import 'package:password_manager/main.dart';
+import 'package:flutter/services.dart';
 import '../model/accounts.dart';
 
 /// View of account details that includes:
@@ -70,8 +72,8 @@ class AccountListView extends StatelessWidget {
               Expanded(
                   child: Container(
                       padding: const EdgeInsets.fromLTRB(2, 0, 5, 0),
-                      child:
-                          getNameValue("Password:", item.password, vertical)))
+                      child: getPasswordSection(item.password, vertical,
+                          context))), //("Password:", item.password, vertical)))
             ])),
         Container(
             height: fieldHeight,
@@ -126,6 +128,15 @@ class AccountListView extends StatelessWidget {
             )),
       ],
     ));
+  }
+
+  Widget getPasswordSection(
+      String passText, bool vertical, BuildContext context) {
+    if (vertical) {
+      return getVerticalPasswordSection("Password:", passText, context);
+    } else {
+      return getHorizontalPasswordSection("Password:", passText, context);
+    }
   }
 
   Widget getBottomSection(vertical) {
@@ -206,6 +217,7 @@ class AccountListView extends StatelessWidget {
             )),
             Expanded(
                 child: Container(
+                    //color: Colors.amber,
                     alignment: Alignment.centerLeft,
                     child: Text(value,
                         textAlign: TextAlign.start,
@@ -240,6 +252,96 @@ class AccountListView extends StatelessWidget {
                         textAlign: TextAlign.start,
                         softWrap: true,
                         style: const TextStyle(fontSize: 14))))
+          ],
+        ));
+  }
+
+  Widget getHorizontalPasswordSection(
+      String name, String value, BuildContext context) {
+    return Container(
+        //decoration:
+        //    BoxDecoration(border: Border.all(width: 2, color: Colors.black38)),
+        child: Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(2),
+          margin: const EdgeInsets.all(2),
+          alignment: Alignment.centerLeft,
+          child: Text(name,
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                  fontSize: 12,
+                  //backgroundColor: Colors.amber,
+                  fontWeight: FontWeight.bold)),
+        ),
+        getPasswordButton(value, context)
+      ],
+    ));
+  }
+
+  Widget getPasswordButton(String value, BuildContext context) {
+    if (value.isEmpty || value.trim().isEmpty) {
+      return Expanded(
+          child: Container(
+        //color: Colors.amber,
+        padding: const EdgeInsets.all(2),
+        margin: const EdgeInsets.all(2),
+        alignment: Alignment.centerLeft,
+        child: const Text("<empty>",
+            textAlign: TextAlign.start, style: TextStyle(fontSize: 14)),
+      ));
+    } else {
+      return Expanded(
+          child: Container(
+        //color: Colors.amber,
+        padding: const EdgeInsets.all(0),
+        margin: const EdgeInsets.all(0),
+        alignment: Alignment.centerLeft,
+        child: TextButton(
+            child: const Text(
+              "-->Copy<--",
+              textAlign: TextAlign.left,
+              style: const TextStyle(fontSize: 11),
+            ),
+            onPressed: () {
+              Clipboard.setData(ClipboardData(text: value));
+              showToast(context);
+            }),
+      ));
+    }
+  }
+
+  void showToast(BuildContext context) {
+    final scaffold = ScaffoldMessenger.of(context);
+    scaffold.showSnackBar(
+      SnackBar(
+        content: const Text('copied'),
+        action: SnackBarAction(
+            label: 'Dismiss', onPressed: scaffold.hideCurrentSnackBar),
+      ),
+    );
+  }
+
+  Widget getVerticalPasswordSection(
+      String name, String value, BuildContext context) {
+    return Container(
+        height: 60,
+        //decoration:
+        //    BoxDecoration(border: Border.all(width: 2, color: Colors.black38)),
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(2),
+              margin: const EdgeInsets.all(2),
+              alignment: Alignment.centerLeft,
+              child: Text(name,
+                  textAlign: TextAlign.start,
+                  style: const TextStyle(
+                      fontSize: 12,
+                      //backgroundColor: Colors.amber,
+                      fontWeight: FontWeight.bold)),
+            ),
+            getPasswordButton(value, context)
           ],
         ));
   }
