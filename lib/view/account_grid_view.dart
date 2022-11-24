@@ -37,7 +37,7 @@ class AccountGridViewState extends State<AccountGridView> {
           children: getChildrenCards(accountViewController.displayedAccounts));
     } else {
       return Container(
-          color: Color.fromARGB(255, 223, 223, 223),
+          color: Color.fromARGB(255, 245, 245, 245),
           child: GridView.count(
             scrollDirection: Axis.vertical,
             mainAxisSpacing: 2,

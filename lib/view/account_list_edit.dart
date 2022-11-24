@@ -25,32 +25,36 @@ class AccountListEditView extends StatelessWidget {
         //height: windowHeight - 510,
         //width: windowWidth - 10,
         child: ListView(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.fromLTRB(6, 2, 6, 2),
       children: <Widget>[
-        Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              CircleAvatar(
-                  radius: 40,
-                  backgroundColor: Colors.blue.shade900,
-                  child: Text(accountNameFirstChar,
-                      style: const TextStyle(
-                          fontSize: 52, fontWeight: FontWeight.bold))),
-              SizedBox(
-                  width: windowWidth - 100,
-                  child: Container(
-                      padding: const EdgeInsets.all(5.0),
-                      child: Text(
-                          //overflow: TextOverflow.clip,
-                          //overflow: TextOverflow.ellipsis,
-                          softWrap: true,
-                          //maxLines: 2,
-                          item.name,
-                          //"Bank of America Jarbo",
-                          style: const TextStyle(
-                              fontSize: 28, fontWeight: FontWeight.bold)))),
-            ]),
+        Container(
+            padding: const EdgeInsets.fromLTRB(6, 2, 6, 2),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                      padding: const EdgeInsets.fromLTRB(3, 5, 5, 5),
+                      child: CircleAvatar(
+                          radius: 40,
+                          backgroundColor: Colors.blue.shade900,
+                          child: Text(accountNameFirstChar,
+                              style: const TextStyle(
+                                  fontSize: 52, fontWeight: FontWeight.bold)))),
+                  SizedBox(
+                      width: windowWidth,
+                      child: Container(
+                          padding: const EdgeInsets.fromLTRB(10, 5, 5, 5),
+                          child: Text(
+                              //overflow: TextOverflow.clip,
+                              //overflow: TextOverflow.ellipsis,
+                              softWrap: true,
+                              //maxLines: 2,
+                              item.name,
+                              //"Bank of America Jarbo",
+                              style: const TextStyle(
+                                  fontSize: 28, fontWeight: FontWeight.bold)))),
+                ])),
         Container(
             height: 50,
             margin: const EdgeInsets.all(4),

@@ -57,6 +57,7 @@ class AccountViewController extends ChangeNotifier {
   void clearSelectedAccount() {
     showAccountCardView = false;
     showAccountEditCardView = false;
+    showAccountCreateView = false;
     currentlySelectedAccount = null;
     clearFilter();
     sortByAccountName();
