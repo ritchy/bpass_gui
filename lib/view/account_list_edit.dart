@@ -1,17 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:password_manager/main.dart';
 import '../model/accounts.dart';
+import 'package:super_tag_editor/tag_editor.dart';
+import 'package:password_manager/controller/account_view_controller.dart';
 
 /// View of account details that includes:
 /// Account Name, user, email password and hint
 /// Account Number, URL, notes and tags
 
-class AccountListEditView extends StatelessWidget {
+class AccountListEditView extends StatefulWidget {
+  @override
   AccountItem item;
   AccountListEditView(this.item, {super.key});
 
   @override
+  AccountListEditViewState createState() => AccountListEditViewState();
+}
+
+class AccountListEditViewState extends State<AccountListEditView> {
+  @override
   Widget build(BuildContext context) {
+    @override
+    AccountItem item = widget.item;
+    //var accountViewController = context.watch<AccountViewController>();
     double windowHeight = MediaQuery.of(context).size.height;
     double windowWidth = MediaQuery.of(context).size.width;
     List<String> tags = (item.tags.isEmpty) ? [] : item.tags;
@@ -106,12 +117,6 @@ class AccountListEditView extends StatelessWidget {
         Container(
             margin: const EdgeInsets.all(4),
             padding: const EdgeInsets.all(4),
-            height: 50,
-            child: getTextWidget("Tags", tagString,
-                onChanged: (value) => print("${item.tags} -> $value"))),
-        Container(
-            margin: const EdgeInsets.all(4),
-            padding: const EdgeInsets.all(4),
             height: 80,
             child: getTextWidget("Web URL", item.url,
                 multiLine: true,
@@ -127,6 +132,13 @@ class AccountListEditView extends StatelessWidget {
                 multiLine: true,
                 maxLines: 6,
                 onChanged: (value) => item.notes = value)),
+        Container(
+            margin: const EdgeInsets.all(4),
+            padding: const EdgeInsets.fromLTRB(6, 4, 6, 4),
+            //height: 120,
+            child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: getTagEditor(tags, context))),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
@@ -193,5 +205,91 @@ class AccountListEditView extends StatelessWidget {
                 //isDense: true,
               )));
     }
+  }
+
+  void onTagDelete(int index) {
+    //print("Deleting index $index for tags ${widget.item.tags}");
+    if (widget.item.tags.length > index) {
+      setState(() {
+        widget.item.tags.removeAt(index);
+        //print("${widget.item.tags}");
+      });
+    } else {
+      print(
+          "bad delete request $index is greater than ${widget.item.tags.length}");
+    }
+  }
+
+  Widget getTagEditor(List<String> tags, BuildContext context) {
+    double windowWidth = MediaQuery.of(context).size.width;
+    //List<String> values = [];
+    return SizedBox(
+        width: windowWidth = 10,
+        //height: 120,
+        child: TagEditor(
+            length: tags.length,
+            delimiters: const [',', ' '],
+            hasAddButton: true,
+            //textAlign: TextAlign.end,
+            inputDecoration: const InputDecoration(
+              floatingLabelAlignment: FloatingLabelAlignment.center,
+              border: InputBorder.none,
+              hintText: 'Add Tags ...',
+            ),
+            onTagChanged: (newValue) {
+              //print('adding $newValue');
+              setState(() {
+                if (widget.item.tags.contains(newValue)) {
+                  //print("already contains $newValue");
+                } else {
+                  widget.item.tags.add(newValue);
+                }
+              });
+            },
+            tagBuilder: (context, index) => _Chip(
+                  index: index,
+                  label: tags[index],
+                  onDeleted: onTagDelete,
+                ),
+            suggestionBuilder: (context, state, data) => ListTile(
+                  key: ObjectKey(data),
+                  title: Text(data.toString()),
+                  onTap: () {
+                    state.selectSuggestion(data);
+                  },
+                ),
+            suggestionsBoxElevation: 10,
+            findSuggestions: (String query) {
+              return [];
+            }));
+  }
+}
+
+class _Chip extends StatelessWidget {
+  const _Chip({
+    required this.label,
+    required this.onDeleted,
+    required this.index,
+  });
+
+  final String label;
+  final ValueChanged<int> onDeleted;
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        padding: const EdgeInsets.all(2),
+        child: Chip(
+          labelPadding: const EdgeInsets.fromLTRB(8.0, 0, 2, 0),
+          label: Text(label),
+          deleteIcon: const Icon(
+            Icons.close,
+            size: 11,
+          ),
+          onDeleted: () {
+            onDeleted(index);
+          },
+        ));
   }
 }

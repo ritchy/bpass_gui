@@ -81,7 +81,7 @@ class CardWidget extends StatelessWidget {
       //color: Colors.amber,
       child: InkWell(
         onTap: () {
-          log.info("tapped card");
+          log.fine("tapped card");
           accountViewController.selectAccount(item);
         },
         child: Column(

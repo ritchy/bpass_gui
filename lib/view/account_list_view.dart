@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:googleapis/cloudbuild/v1.dart';
 import 'package:password_manager/main.dart';
 import 'package:flutter/services.dart';
+import '../controller/account_view_controller.dart';
 import '../model/accounts.dart';
 
 /// View of account details that includes:
@@ -10,12 +11,15 @@ import '../model/accounts.dart';
 
 class AccountListView extends StatelessWidget {
   AccountItem item;
+  //AccountViewController accountViewController;
+
   AccountListView(this.item, {super.key});
 
   @override
   Widget build(BuildContext context) {
     double windowHeight = MediaQuery.of(context).size.height;
     double windowWidth = MediaQuery.of(context).size.width;
+
     String accountNameFirstChar = item.name.isEmpty ? "" : item.name[0];
     bool vertical = windowWidth < 600;
     double fieldHeight = 30;
@@ -112,6 +116,17 @@ class AccountListView extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
+                TextButton(
+                    child: const Text('Delete'),
+                    onPressed: () {
+                      showAlertDialog(context);
+                    }),
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    color: Colors.amber,
+                  ),
+                ),
                 TextButton(
                     child: const Text('Edit'),
                     onPressed: () {
@@ -277,6 +292,47 @@ class AccountListView extends StatelessWidget {
         getPasswordButton(value, context)
       ],
     ));
+  }
+
+  Future<void> handleDelete() async {
+    accountViewController.accounts.markAccountAsDeleted(item);
+    await accountViewController.accounts.updateAccountFiles(null);
+    accountViewController.clearSelectedAccount();
+  }
+
+  void showAlertDialog(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: Text("Cancel Delete"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton = TextButton(
+      child: Text("Yes Delete"),
+      onPressed: () {
+        handleDelete();
+        Navigator.of(context).pop();
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Delete ${item.name}?"),
+      content: Text("Are you sure you want to delete?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 
   Widget getPasswordButton(String value, BuildContext context) {

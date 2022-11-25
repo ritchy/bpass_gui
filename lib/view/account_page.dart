@@ -63,7 +63,7 @@ class AccountsPageState extends State<AccountsPage> {
 
   void handleColumnClick(int i) => setState(() {
         //log.info("Handlecolumclick");
-        Clipboard.setData(const ClipboardData(text: "Your Copy text"));
+        //Clipboard.setData(const ClipboardData(text: "Your Copy text"));
         selectedRow = null;
         selectedColumn = null;
         selectedAccount = null;
@@ -72,12 +72,14 @@ class AccountsPageState extends State<AccountsPage> {
       });
 
   void handleClick(int i, int j) {
+    //print('click: $i : $j');
     setState(() {
       selectedColumn = i;
       selectedRow = j;
       autoSelectColumn = false;
       selectedAccount = accountViewController.getAccountByIndex(j);
     });
+    //print("selected row $selectedRow");
   }
 
   Future<void> requestAccessToDriveFile() async {
@@ -244,7 +246,7 @@ class AccountsPageState extends State<AccountsPage> {
 
   Widget getWidgetRow() {
     //log.finer("getWidgetRow");
-    clearState();
+    //clearState();
     var displayIcon = const Icon(Icons.list_rounded, size: 55);
     if (showGridView) {
       displayIcon = const Icon(
@@ -293,7 +295,7 @@ class AccountsPageState extends State<AccountsPage> {
     if (rowNumber == 0) {
       accountName = ">New Entry<";
     }
-
+    //print("row title widget: $selectedRow");
     if (selectedRow == rowNumber) {
       return getRowTitleEditContainer(rowNumber);
     } else {
@@ -347,6 +349,9 @@ class AccountsPageState extends State<AccountsPage> {
   }
 
   Widget getCellWidget(int i, int j) {
+    if (j == 9) {
+      print("getCelWidget $selectedRow : $j ");
+    }
     if (selectedRow != j) {
       return ElevatedButton(
         style: ButtonStyle(
