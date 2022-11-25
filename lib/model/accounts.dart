@@ -424,7 +424,7 @@ class AccountItem {
 
   @override
   String toString() {
-    return "name: $name, username: $username, hint: $hint, email: $email, account number: $accountNumber, status $status, url: $url, new: $newAccount";
+    return "name: $name, username: $username, hint: $hint, email: $email, account number: $accountNumber, status $status, url: $url, new: $newAccount, tags: $tags";
   }
 
   Map<String, dynamic> toJson() {
