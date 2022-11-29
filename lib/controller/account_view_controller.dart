@@ -257,7 +257,9 @@ class AccountViewController extends ChangeNotifier {
         accounts.updateAccountFiles(googleService);
       } else {
         Console.normal(
-            "This appears to be your first sync, generating encryption keys ...");
+            "This appears to be your first Drive sync, generating encryption keys and uploading file for first time ...");
+        await googleService?.initEncryptionKey();
+        await accounts.updateAccountFiles(googleService);
       }
     }
   }
