@@ -84,6 +84,8 @@ Open up TestFlight and update/install
 
 
 ## Requesting access to share google Drive file
+https://console.cloud.google.com/apis/credentials/consent?pli=1
+
 
 access.json
 [
