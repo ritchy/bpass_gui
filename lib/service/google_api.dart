@@ -322,7 +322,7 @@ class GoogleService {
       return cryptoHandler?.encryptAcccountFileContent(content);
     } else {
       log.severe(
-          "Unable to encrypt google file, one of these is null, app dir path: $appDirPath or our key: ${googleSettings.keyAsBase64}, so not saving");
+          "Unable to encrypt google file, one of these is null, app dir path: $appDirPath or our key null? ${(googleSettings.keyAsBase64 == null)}, so not saving");
     }
     return null;
   }
@@ -944,7 +944,7 @@ class GoogleService {
           keyAsBase64 ??= "";
           var clientAccessId = jsonResponse['client_access_id'];
           clientAccessId ??= "";
-          log.info("key: $keyAsBase64 id: $clientAccessId");
+          //log.info("key: $keyAsBase64 id: $clientAccessId");
           return GoogleSettings(
               authClientSettings:
                   AuthClientSettings(data, type, expiry, refreshToken),

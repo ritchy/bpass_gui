@@ -152,7 +152,7 @@ class AccountListEditViewState extends State<AccountListEditView> {
             TextButton(
                 child: const Text('Save'),
                 onPressed: () {
-                  log.info("saving account $item");
+                  log.fine("saving account $item");
                   //accountViewController.editSelectedAccount();
                   //accountViewController.updateCurrentlySelectedAccount();
                   if (item.newAccount) {

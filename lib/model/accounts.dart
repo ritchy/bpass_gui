@@ -3,6 +3,8 @@ import 'package:logging/logging.dart';
 import 'dart:io';
 import 'dart:convert';
 
+import '../console.dart';
+
 class Accounts {
   File? file;
 
@@ -158,21 +160,26 @@ class Accounts {
   void loadFile(File file) {
     this.file = file;
     log.info("loading from file: ${file.path}");
-    var id = DateTime.now().millisecondsSinceEpoch;
+    //var id = DateTime.now().millisecondsSinceEpoch;
     //accounts.add(
     //    AccountItem("", id, "", "", "", "", "", "", "", [], newAccount: true));
     //title_rows.add("");
     //file.openRead();
     String contents = file.readAsStringSync();
-    var jsonResponse = jsonDecode(contents);
-    for (var entry in jsonResponse) {
-      AccountItem item = getAccountItemFromJsonEntry(entry);
-      addAccount(item);
-      //accounts.add(item);
-      //add any new tags to global tag list
-      for (String tagValue in item.tags) {
-        if (!tags.contains(tagValue)) {
-          tags.add(tagValue);
+    if (contents.isEmpty || contents.trim().isEmpty) {
+      //Console.normal(message)
+      updateAccountFiles(null);
+    } else {
+      var jsonResponse = jsonDecode(contents);
+      for (var entry in jsonResponse) {
+        AccountItem item = getAccountItemFromJsonEntry(entry);
+        addAccount(item);
+        //accounts.add(item);
+        //add any new tags to global tag list
+        for (String tagValue in item.tags) {
+          if (!tags.contains(tagValue)) {
+            tags.add(tagValue);
+          }
         }
       }
     }
@@ -356,6 +363,23 @@ class Accounts {
     }
   }
 
+  void addWelcomeAccount() {
+    var id = DateTime.now().millisecondsSinceEpoch;
+    accounts.add(AccountItem(
+        "Welcome",
+        id,
+        "welcomeuser",
+        "",
+        "hint: welcome",
+        "welcome@email.com",
+        "",
+        "",
+        "You can edit this acccount or delete completely",
+        [],
+        lastUpdated: DateTime.now(),
+        newAccount: true));
+  }
+
   void replaceDeletedAccountItem(AccountItem toReplace, AccountItem newItem) {
     int itemIndex = accounts.indexOf(toReplace);
     if (itemIndex >= 0) {
@@ -383,20 +407,32 @@ class Accounts {
   }
 
   Future<void> updateAccountFiles(GoogleService? googleService) async {
-    print("saving ${accounts.length} accounts");
     removeEmptyAccounts();
+    if (accounts.isEmpty) {
+      addWelcomeAccount();
+    }
+    Console.normal("saving ${accounts.length} accounts");
     List combinedAccounts = [];
     combinedAccounts.addAll(accounts);
     combinedAccounts.addAll(deletedAccounts);
-    var sink = file?.openWrite();
-    JsonEncoder encoder = const JsonEncoder.withIndent('  ');
-    String prettyprint = encoder.convert(combinedAccounts);
-    sink?.write(prettyprint);
-    // Close the IOSink to free system resources.
-    await sink?.close();
-    if (googleService != null) {
-      //print("Calling google.updateAccountFile()");
-      await googleService.updateAccountFileInDrive(prettyprint);
+    if (file == null) {
+      log.warning("account file hasn't been loaded");
+      //print('file is null?');
+    } else {
+      var sink = file?.openWrite();
+      JsonEncoder encoder = const JsonEncoder.withIndent('  ');
+      String prettyprint = encoder.convert(combinedAccounts);
+      //print("saving $prettyprint");
+      sink?.write(prettyprint);
+      // Close the IOSink to free system resources.
+      await sink?.close();
+      if (googleService != null) {
+        //print("Calling google.updateAccountFile()");
+        await googleService.updateAccountFileInDrive(prettyprint);
+      } else {
+        Console.normal(
+            "Google service isn't initialized, did you get logged in successfully?");
+      }
     }
   }
 }
