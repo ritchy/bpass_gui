@@ -74,11 +74,30 @@ class CardWidget extends StatelessWidget {
 
   CardWidget(this.item, this.acccountViewController, {super.key});
 
+  Color getBackgroundColor() {
+    bool lightTheme = true;
+    if (lightTheme) {
+      return Colors.white70;
+      //return Color.fromARGB(4, 255, 214, 64);
+    } else {
+      return Colors.black12;
+    }
+  }
+
+  Color getForegroundColor() {
+    bool lightTheme = true;
+    if (lightTheme) {
+      return Colors.black54;
+    } else {
+      return Colors.white70;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
         child: Card(
-      //color: Colors.amber,
+      color: getBackgroundColor(),
       child: InkWell(
         onTap: () {
           log.fine("tapped card");
@@ -89,21 +108,30 @@ class CardWidget extends StatelessWidget {
           children: <Widget>[
             ListTile(
               //leading: Icon(Icons.album),
-              title: Text(overflow: TextOverflow.ellipsis, item.name),
+              title: Text(
+                  overflow: TextOverflow.ellipsis,
+                  item.name,
+                  style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: getForegroundColor())),
               subtitle: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Align(
                         alignment: Alignment.centerLeft,
-                        child: Text(
-                          item.username,
-                          overflow: TextOverflow.ellipsis,
-                        )),
+                        child: Text(item.username,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                //fontWeight: FontWeight.bold,
+                                color: getForegroundColor()))),
                     Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
                           'hint: ${item.hint}',
                           overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              //fontWeight: FontWeight.bold,
+                              color: getForegroundColor()),
                         ))
                   ]),
             )
@@ -140,6 +168,7 @@ class NewAccountWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
         child: Card(
+      color: Colors.white70,
       //color: Colors.amber,
       child: InkWell(
         onTap: () {
@@ -151,7 +180,12 @@ class NewAccountWidget extends StatelessWidget {
           children: <Widget>[
             ListTile(
               //leading: Icon(Icons.album),
-              title: const Text(overflow: TextOverflow.ellipsis, "New Account"),
+              title: const Text(
+                overflow: TextOverflow.ellipsis,
+                "New Account",
+                style: TextStyle(
+                    fontWeight: FontWeight.w600, color: Colors.black54),
+              ),
               subtitle: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: const <Widget>[

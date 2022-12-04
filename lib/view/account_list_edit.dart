@@ -39,6 +39,7 @@ class AccountListEditViewState extends State<AccountListEditView> {
       padding: const EdgeInsets.fromLTRB(6, 2, 6, 2),
       children: <Widget>[
         Container(
+            color: Color.fromARGB(151, 255, 214, 64),
             padding: const EdgeInsets.fromLTRB(6, 2, 6, 2),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

@@ -3,14 +3,12 @@ import 'package:password_manager/main.dart';
 import 'package:password_manager/service/google_api.dart';
 import 'package:password_manager/service/google_service_notifier.dart';
 import 'package:password_manager/controller/account_view_controller.dart';
-import 'package:password_manager/view/tool_tab.dart';
 import 'package:table_sticky_headers/table_sticky_headers.dart';
 import 'package:password_manager/model/accounts.dart';
 import 'package:provider/provider.dart';
 import 'package:password_manager/view/decorated_table_page.dart';
 import 'package:password_manager/view/autocomplete_label.dart';
 import 'package:logging/logging.dart';
-import 'package:flutter/services.dart';
 
 import 'account_grid_view.dart';
 import 'account_list_edit.dart';
@@ -42,6 +40,15 @@ class AccountsPageState extends State<AccountsPage> {
       return Colors.amberAccent;
     } else {
       return Colors.transparent;
+    }
+  }
+
+  Color getBackgroundColor() {
+    bool lightTheme = true;
+    if (lightTheme) {
+      return Colors.white70;
+    } else {
+      return Colors.black54;
     }
   }
 
@@ -247,11 +254,12 @@ class AccountsPageState extends State<AccountsPage> {
   Widget getWidgetRow() {
     //log.finer("getWidgetRow");
     //clearState();
+    //var displayIcon = const Icon(Icons.account_circle_rounded, size: 55);
     var displayIcon = const Icon(Icons.list_rounded, size: 55);
     if (showGridView) {
       displayIcon = const Icon(
         Icons.apps_rounded,
-        size: 50,
+        size: 55,
       );
       //showFilterViews = true;
     } else {
@@ -283,7 +291,7 @@ class AccountsPageState extends State<AccountsPage> {
               },
               padding: const EdgeInsets.fromLTRB(2, 2, 2, 2),
               icon: displayIcon,
-              color: Colors.white70,
+              color: getBackgroundColor(),
             ),
           ],
         ));
@@ -312,7 +320,7 @@ class AccountsPageState extends State<AccountsPage> {
       return SizedBox(
           height: 45,
           child: FloatingActionButton(
-            backgroundColor: Colors.white70,
+            backgroundColor: getBackgroundColor(),
             onPressed: () => handleGoogleDriveLogout(),
             tooltip: 'login',
             child: const Text(
@@ -325,7 +333,7 @@ class AccountsPageState extends State<AccountsPage> {
       return SizedBox(
           height: 45,
           child: FloatingActionButton(
-            backgroundColor: Colors.white70,
+            backgroundColor: getBackgroundColor(),
             onPressed: () => cancelGoogleDriveLogin(),
             tooltip: 'login',
             child: const CircularProgressIndicator(
@@ -336,7 +344,7 @@ class AccountsPageState extends State<AccountsPage> {
       return SizedBox(
           height: 45,
           child: FloatingActionButton(
-            backgroundColor: Colors.white70,
+            backgroundColor: getBackgroundColor(),
             onPressed: () => handleGoogleDriveLogin(),
             tooltip: 'login',
             child: const Text(
@@ -349,9 +357,6 @@ class AccountsPageState extends State<AccountsPage> {
   }
 
   Widget getCellWidget(int i, int j) {
-    if (j == 9) {
-      print("getCelWidget $selectedRow : $j ");
-    }
     if (selectedRow != j) {
       return ElevatedButton(
         style: ButtonStyle(

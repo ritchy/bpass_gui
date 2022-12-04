@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:googleapis/cloudbuild/v1.dart';
 import 'package:password_manager/main.dart';
 import 'package:flutter/services.dart';
-import '../controller/account_view_controller.dart';
 import '../model/accounts.dart';
 
 /// View of account details that includes:
@@ -34,6 +32,7 @@ class AccountListView extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(6, 2, 6, 2),
       children: <Widget>[
         Container(
+            color: Color.fromARGB(151, 255, 214, 64),
             padding: const EdgeInsets.fromLTRB(6, 2, 6, 2),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,6 +62,7 @@ class AccountListView extends StatelessWidget {
                                   fontSize: 28, fontWeight: FontWeight.bold)))),
                 ])),
         Container(
+            //color: Colors.white70,
             height: fieldHeight,
             margin: const EdgeInsets.all(10),
             //padding: const EdgeInsets.all(4),
