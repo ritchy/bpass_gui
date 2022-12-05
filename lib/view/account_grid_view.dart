@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+//import 'package:googleapis/calendar/v3.dart';
+import 'package:flutter/src/material/colors.dart';
 import 'package:password_manager/controller/account_view_controller.dart';
 import 'package:password_manager/main.dart';
 import 'package:provider/provider.dart';
@@ -77,8 +79,11 @@ class CardWidget extends StatelessWidget {
   Color getBackgroundColor() {
     bool lightTheme = true;
     if (lightTheme) {
-      return Colors.white70;
+      //return Color.fromARGB(248, 223, 225, 231);
       //return Color.fromARGB(4, 255, 214, 64);
+      //return Color.fromARGB(255, 204, 209, 244);
+      //return Color.fromARGB(131, 255, 214, 64);
+      return Color.fromARGB(216, 234, 221, 176);
     } else {
       return Colors.black12;
     }
@@ -87,7 +92,7 @@ class CardWidget extends StatelessWidget {
   Color getForegroundColor() {
     bool lightTheme = true;
     if (lightTheme) {
-      return Colors.black54;
+      return Colors.black;
     } else {
       return Colors.white70;
     }
@@ -168,7 +173,11 @@ class NewAccountWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
         child: Card(
-      color: Colors.white70,
+      //color: Color.fromARGB(190, 255, 255, 255),
+      //color: Color.fromARGB(248, 223, 225, 231),
+      //blue color
+      //color: Color.fromARGB(255, 204, 209, 244),
+      color: Color.fromARGB(216, 234, 221, 176),
       //color: Colors.amber,
       child: InkWell(
         onTap: () {
@@ -183,8 +192,8 @@ class NewAccountWidget extends StatelessWidget {
               title: const Text(
                 overflow: TextOverflow.ellipsis,
                 "New Account",
-                style: TextStyle(
-                    fontWeight: FontWeight.w600, color: Colors.black54),
+                style:
+                    TextStyle(fontWeight: FontWeight.w600, color: Colors.black),
               ),
               subtitle: Column(
                   mainAxisAlignment: MainAxisAlignment.start,

@@ -28,121 +28,134 @@ class AccountListView extends StatelessWidget {
     return Expanded(
         //height: windowHeight - 510,
         //width: windowWidth - 10,
-        child: ListView(
-      padding: const EdgeInsets.fromLTRB(6, 2, 6, 2),
-      children: <Widget>[
-        Container(
-            color: Color.fromARGB(151, 255, 214, 64),
-            padding: const EdgeInsets.fromLTRB(6, 2, 6, 2),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                      padding: const EdgeInsets.fromLTRB(3, 5, 5, 5),
-                      child: CircleAvatar(
-                          radius: 40,
-                          backgroundColor: Colors.blue.shade900,
-                          child: Text(accountNameFirstChar,
-                              style: const TextStyle(
-                                  fontSize: 52, fontWeight: FontWeight.bold)))),
-                  SizedBox(
-                      width: windowWidth,
-                      child: Container(
-                          //color: Colors.amber,
-                          padding: const EdgeInsets.fromLTRB(10, 5, 5, 5),
-                          child: Text(
-                              //overflow: TextOverflow.clip,
-                              //overflow: TextOverflow.ellipsis,
-                              softWrap: true,
-                              //maxLines: 2,
-                              item.name,
-                              //"Bank of America Jarbo",
-                              style: const TextStyle(
-                                  fontSize: 28, fontWeight: FontWeight.bold)))),
-                ])),
-        Container(
-            //color: Colors.white70,
-            height: fieldHeight,
-            margin: const EdgeInsets.all(10),
-            //padding: const EdgeInsets.all(4),
-            child: Row(children: [
-              Expanded(
-                  child: Container(
-                      //color: Colors.amber,
-                      padding: const EdgeInsets.fromLTRB(2, 0, 5, 0),
-                      child:
-                          getNameValue("Account Name:", item.name, vertical))),
-              Expanded(
-                  child: Container(
-                      padding: const EdgeInsets.fromLTRB(2, 0, 5, 0),
-                      child: getPasswordSection(item.password, vertical,
-                          context))), //("Password:", item.password, vertical)))
-            ])),
-        Container(
-            height: fieldHeight,
-            margin: const EdgeInsets.all(10),
-            //padding: const EdgeInsets.all(4),
-            child: Row(children: [
-              Expanded(
-                  child: Container(
-                      padding: const EdgeInsets.fromLTRB(2, 0, 5, 0),
-                      child:
-                          getNameValue("User Name:", item.username, vertical))),
-              Expanded(
-                  child: Container(
-                      padding: const EdgeInsets.fromLTRB(2, 0, 5, 0),
-                      child: getNameValue("Hint:", item.hint, vertical)))
-            ])),
-        Container(
-            height: fieldHeight,
-            margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-            //padding: const EdgeInsets.all(4),
-            child: Row(children: [
-              Expanded(
-                  child: Container(
-                      padding: const EdgeInsets.fromLTRB(2, 0, 5, 0),
-                      child: getNameValue("Email:", item.email, vertical))),
-              Expanded(
-                  child: Container(
-                      padding: const EdgeInsets.fromLTRB(2, 0, 5, 0),
-                      child: getNameValue(
-                          "Account Number:", item.accountNumber, vertical)))
-            ])),
-        //getBottomSection(windowWidth),
-        getBottomSection(vertical),
-        Container(
-            margin: const EdgeInsets.fromLTRB(10, 0, 40, 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+        child: Container(
+            color: Color.fromARGB(117, 213, 209, 209),
+            //color: Color.fromARGB(255, 138, 142, 169),
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(6, 2, 6, 2),
               children: <Widget>[
-                TextButton(
-                    child: const Text('Delete'),
-                    onPressed: () {
-                      showAlertDialog(context);
-                    }),
-                Expanded(
-                  flex: 2,
-                  child: Container(
-                    color: Colors.amber,
-                  ),
-                ),
-                TextButton(
-                    child: const Text('Edit'),
-                    onPressed: () {
-                      accountViewController.editSelectedAccount();
-                    }),
-                TextButton(
-                  child: const Text('Done'),
-                  onPressed: () {
-                    accountViewController.clearSelectedAccount();
-                  },
-                ),
-                //const SizedBox(width: 2),
+                Container(
+                    //color: Color.fromARGB(151, 255, 214, 64),
+                    //cool blue color
+                    //color: Color.fromARGB(255, 204, 209, 244),
+                    color: Color.fromARGB(216, 234, 221, 176),
+                    //decoration: BoxDecoration(
+                    //    border: Border.all(width: 1, color: Colors.black38)),
+                    padding: const EdgeInsets.fromLTRB(6, 2, 6, 2),
+                    margin: const EdgeInsets.fromLTRB(0, 2, 0, 2),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                              padding: const EdgeInsets.fromLTRB(3, 5, 5, 5),
+                              child: CircleAvatar(
+                                  radius: 40,
+                                  backgroundColor: Colors.blue.shade900,
+                                  child: Text(accountNameFirstChar,
+                                      style: const TextStyle(
+                                          fontSize: 52,
+                                          fontWeight: FontWeight.bold)))),
+                          SizedBox(
+                              width: windowWidth,
+                              child: Container(
+                                  //color: Colors.amber,
+                                  padding:
+                                      const EdgeInsets.fromLTRB(10, 5, 5, 5),
+                                  child: Text(
+                                      //overflow: TextOverflow.clip,
+                                      //overflow: TextOverflow.ellipsis,
+                                      softWrap: true,
+                                      //maxLines: 2,
+                                      item.name,
+                                      //"Bank of America Jarbo",
+                                      style: const TextStyle(
+                                          fontSize: 28,
+                                          fontWeight: FontWeight.bold)))),
+                        ])),
+                Container(
+                    height: fieldHeight,
+                    margin: const EdgeInsets.all(10),
+                    //padding: const EdgeInsets.all(4),
+                    child: Row(children: [
+                      Expanded(
+                          child: Container(
+                              //color: Colors.amber,
+                              padding: const EdgeInsets.fromLTRB(2, 0, 5, 0),
+                              child: getNameValue(
+                                  "Account Name:", item.name, vertical))),
+                      Expanded(
+                          child: Container(
+                              padding: const EdgeInsets.fromLTRB(2, 0, 5, 0),
+                              child: getPasswordSection(item.password, vertical,
+                                  context))), //("Password:", item.password, vertical)))
+                    ])),
+                Container(
+                    height: fieldHeight,
+                    margin: const EdgeInsets.all(10),
+                    //padding: const EdgeInsets.all(4),
+                    child: Row(children: [
+                      Expanded(
+                          child: Container(
+                              padding: const EdgeInsets.fromLTRB(2, 0, 5, 0),
+                              child: getNameValue(
+                                  "User Name:", item.username, vertical))),
+                      Expanded(
+                          child: Container(
+                              padding: const EdgeInsets.fromLTRB(2, 0, 5, 0),
+                              child:
+                                  getNameValue("Hint:", item.hint, vertical)))
+                    ])),
+                Container(
+                    height: fieldHeight,
+                    margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    //padding: const EdgeInsets.all(4),
+                    child: Row(children: [
+                      Expanded(
+                          child: Container(
+                              padding: const EdgeInsets.fromLTRB(2, 0, 5, 0),
+                              child: getNameValue(
+                                  "Email:", item.email, vertical))),
+                      Expanded(
+                          child: Container(
+                              padding: const EdgeInsets.fromLTRB(2, 0, 5, 0),
+                              child: getNameValue("Account Number:",
+                                  item.accountNumber, vertical)))
+                    ])),
+                //getBottomSection(windowWidth),
+                getBottomSection(vertical),
+                Container(
+                    margin: const EdgeInsets.fromLTRB(10, 0, 40, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        TextButton(
+                            child: const Text('Delete'),
+                            onPressed: () {
+                              showAlertDialog(context);
+                            }),
+                        Expanded(
+                          flex: 2,
+                          child: Container(
+                            color: Colors.amber,
+                          ),
+                        ),
+                        TextButton(
+                            child: const Text('Edit'),
+                            onPressed: () {
+                              accountViewController.editSelectedAccount();
+                            }),
+                        TextButton(
+                          child: const Text('Done'),
+                          onPressed: () {
+                            accountViewController.clearSelectedAccount();
+                          },
+                        ),
+                        //const SizedBox(width: 2),
+                      ],
+                    )),
               ],
-            )),
-      ],
-    ));
+            )));
   }
 
   Widget getPasswordSection(
@@ -349,15 +362,15 @@ class AccountListView extends StatelessWidget {
     } else {
       return Expanded(
           child: Container(
-        //color: Colors.amber,
+        //color: Color.fromARGB(35, 255, 214, 64),
         padding: const EdgeInsets.all(0),
         margin: const EdgeInsets.all(0),
-        alignment: Alignment.centerLeft,
+        alignment: Alignment.topLeft,
         child: TextButton(
             child: const Text(
               "-->Copy<--",
-              textAlign: TextAlign.left,
-              style: const TextStyle(fontSize: 11),
+              textAlign: TextAlign.start,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
             ),
             onPressed: () {
               Clipboard.setData(ClipboardData(text: value));
@@ -371,7 +384,7 @@ class AccountListView extends StatelessWidget {
     final scaffold = ScaffoldMessenger.of(context);
     scaffold.showSnackBar(
       SnackBar(
-        content: const Text('copied'),
+        content: const Text('Password Copied'),
         action: SnackBarAction(
             label: 'Dismiss', onPressed: scaffold.hideCurrentSnackBar),
       ),
