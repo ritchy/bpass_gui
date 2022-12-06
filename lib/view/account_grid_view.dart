@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:password_manager/settings.dart';
 //import 'package:googleapis/calendar/v3.dart';
-import 'package:flutter/src/material/colors.dart';
+//import 'package:flutter/src/material/colors.dart';
 import 'package:password_manager/controller/account_view_controller.dart';
 import 'package:password_manager/main.dart';
 import 'package:provider/provider.dart';
@@ -39,7 +40,7 @@ class AccountGridViewState extends State<AccountGridView> {
           children: getChildrenCards(accountViewController.displayedAccounts));
     } else {
       return Container(
-          color: Color.fromARGB(255, 245, 245, 245),
+          color: Color.fromARGB(15, 99, 97, 95),
           child: GridView.count(
             scrollDirection: Axis.vertical,
             mainAxisSpacing: 2,
@@ -73,36 +74,14 @@ class AccountGridViewState extends State<AccountGridView> {
 class CardWidget extends StatelessWidget {
   AccountItem item;
   AccountViewController acccountViewController;
-
+  Settings settings = Settings();
   CardWidget(this.item, this.acccountViewController, {super.key});
-
-  Color getBackgroundColor() {
-    bool lightTheme = true;
-    if (lightTheme) {
-      //return Color.fromARGB(248, 223, 225, 231);
-      //return Color.fromARGB(4, 255, 214, 64);
-      //return Color.fromARGB(255, 204, 209, 244);
-      //return Color.fromARGB(131, 255, 214, 64);
-      return Color.fromARGB(255, 245, 225, 145);
-    } else {
-      return Colors.black12;
-    }
-  }
-
-  Color getForegroundColor() {
-    bool lightTheme = true;
-    if (lightTheme) {
-      return Colors.black;
-    } else {
-      return Colors.white70;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     return Center(
         child: Card(
-      color: getBackgroundColor(),
+      color: settings.getBackgroundColor(),
       child: InkWell(
         onTap: () {
           log.fine("tapped card");
@@ -118,7 +97,7 @@ class CardWidget extends StatelessWidget {
                   item.name,
                   style: TextStyle(
                       fontWeight: FontWeight.w600,
-                      color: getForegroundColor())),
+                      color: settings.getForegroundColor())),
               subtitle: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
@@ -128,7 +107,7 @@ class CardWidget extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                                 //fontWeight: FontWeight.bold,
-                                color: getForegroundColor()))),
+                                color: settings.getForegroundColor()))),
                     Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
@@ -136,7 +115,7 @@ class CardWidget extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                               //fontWeight: FontWeight.bold,
-                              color: getForegroundColor()),
+                              color: settings.getForegroundColor()),
                         ))
                   ]),
             )
@@ -168,16 +147,12 @@ class NewAccountWidget extends StatelessWidget {
   AccountViewController acccountViewController;
   AccountItem item;
   NewAccountWidget(this.item, this.acccountViewController, {super.key});
-
+  Settings settings = Settings();
   @override
   Widget build(BuildContext context) {
     return Center(
         child: Card(
-      //color: Color.fromARGB(190, 255, 255, 255),
-      //color: Color.fromARGB(248, 223, 225, 231),
-      //blue color
-      //color: Color.fromARGB(255, 204, 209, 244),
-      color: Color.fromARGB(255, 245, 225, 145),
+      color: settings.getBackgroundColor(),
       //color: Colors.amber,
       child: InkWell(
         onTap: () {

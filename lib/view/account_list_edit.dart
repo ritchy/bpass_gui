@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:password_manager/main.dart';
 import '../model/accounts.dart';
 import 'package:super_tag_editor/tag_editor.dart';
-import 'package:password_manager/controller/account_view_controller.dart';
+import 'package:password_manager/settings.dart';
 
 /// View of account details that includes:
 /// Account Name, user, email password and hint
@@ -18,6 +18,8 @@ class AccountListEditView extends StatefulWidget {
 }
 
 class AccountListEditViewState extends State<AccountListEditView> {
+  Settings settings = Settings();
+
   @override
   Widget build(BuildContext context) {
     @override
@@ -43,7 +45,7 @@ class AccountListEditViewState extends State<AccountListEditView> {
                 Container(
                     //cool blue color
                     //  color: Color.fromARGB(255, 204, 209, 244),
-                    color: Color.fromARGB(255, 241, 226, 163),
+                    color: settings.getBackgroundColor(),
                     padding: const EdgeInsets.fromLTRB(6, 2, 6, 2),
                     margin: const EdgeInsets.fromLTRB(0, 2, 0, 2),
                     child: Column(
@@ -54,8 +56,7 @@ class AccountListEditViewState extends State<AccountListEditView> {
                               padding: const EdgeInsets.fromLTRB(3, 5, 5, 5),
                               child: CircleAvatar(
                                   radius: 40,
-                                  backgroundColor:
-                                      Color.fromARGB(255, 2, 51, 124),
+                                  backgroundColor: settings.getAvatarColor(),
                                   child: Text(accountNameFirstChar,
                                       style: const TextStyle(
                                           fontSize: 52,

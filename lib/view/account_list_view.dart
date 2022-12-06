@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:password_manager/main.dart';
 import 'package:flutter/services.dart';
 import '../model/accounts.dart';
+import 'package:password_manager/settings.dart';
 
 /// View of account details that includes:
 /// Account Name, user, email password and hint
@@ -10,6 +11,7 @@ import '../model/accounts.dart';
 class AccountListView extends StatelessWidget {
   AccountItem item;
   //AccountViewController accountViewController;
+  Settings settings = Settings();
 
   AccountListView(this.item, {super.key});
 
@@ -38,7 +40,7 @@ class AccountListView extends StatelessWidget {
                     //color: Color.fromARGB(151, 255, 214, 64),
                     //cool blue color
                     //color: Color.fromARGB(255, 204, 209, 244),
-                    color: Color.fromARGB(255, 241, 226, 163),
+                    color: settings.getBackgroundColor(),
                     //decoration: BoxDecoration(
                     //    border: Border.all(width: 1, color: Colors.black38)),
                     padding: const EdgeInsets.fromLTRB(6, 2, 6, 2),
@@ -51,8 +53,7 @@ class AccountListView extends StatelessWidget {
                               padding: const EdgeInsets.fromLTRB(3, 5, 5, 5),
                               child: CircleAvatar(
                                   radius: 40,
-                                  backgroundColor:
-                                      Color.fromARGB(255, 2, 51, 124),
+                                  backgroundColor: settings.getAvatarColor(),
                                   child: Text(accountNameFirstChar,
                                       style: const TextStyle(
                                           fontSize: 52,
