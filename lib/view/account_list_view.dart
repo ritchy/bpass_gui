@@ -38,7 +38,7 @@ class AccountListView extends StatelessWidget {
                     //color: Color.fromARGB(151, 255, 214, 64),
                     //cool blue color
                     //color: Color.fromARGB(255, 204, 209, 244),
-                    color: Color.fromARGB(216, 234, 221, 176),
+                    color: Color.fromARGB(255, 241, 226, 163),
                     //decoration: BoxDecoration(
                     //    border: Border.all(width: 1, color: Colors.black38)),
                     padding: const EdgeInsets.fromLTRB(6, 2, 6, 2),
@@ -51,7 +51,8 @@ class AccountListView extends StatelessWidget {
                               padding: const EdgeInsets.fromLTRB(3, 5, 5, 5),
                               child: CircleAvatar(
                                   radius: 40,
-                                  backgroundColor: Colors.blue.shade900,
+                                  backgroundColor:
+                                      Color.fromARGB(255, 2, 51, 124),
                                   child: Text(accountNameFirstChar,
                                       style: const TextStyle(
                                           fontSize: 52,

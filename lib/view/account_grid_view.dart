@@ -83,7 +83,7 @@ class CardWidget extends StatelessWidget {
       //return Color.fromARGB(4, 255, 214, 64);
       //return Color.fromARGB(255, 204, 209, 244);
       //return Color.fromARGB(131, 255, 214, 64);
-      return Color.fromARGB(216, 234, 221, 176);
+      return Color.fromARGB(255, 245, 225, 145);
     } else {
       return Colors.black12;
     }
@@ -177,7 +177,7 @@ class NewAccountWidget extends StatelessWidget {
       //color: Color.fromARGB(248, 223, 225, 231),
       //blue color
       //color: Color.fromARGB(255, 204, 209, 244),
-      color: Color.fromARGB(216, 234, 221, 176),
+      color: Color.fromARGB(255, 245, 225, 145),
       //color: Colors.amber,
       child: InkWell(
         onTap: () {

@@ -43,7 +43,7 @@ class AccountListEditViewState extends State<AccountListEditView> {
                 Container(
                     //cool blue color
                     //  color: Color.fromARGB(255, 204, 209, 244),
-                    color: Color.fromARGB(216, 234, 221, 176),
+                    color: Color.fromARGB(255, 241, 226, 163),
                     padding: const EdgeInsets.fromLTRB(6, 2, 6, 2),
                     margin: const EdgeInsets.fromLTRB(0, 2, 0, 2),
                     child: Column(
@@ -54,7 +54,8 @@ class AccountListEditViewState extends State<AccountListEditView> {
                               padding: const EdgeInsets.fromLTRB(3, 5, 5, 5),
                               child: CircleAvatar(
                                   radius: 40,
-                                  backgroundColor: Colors.blue.shade900,
+                                  backgroundColor:
+                                      Color.fromARGB(255, 2, 51, 124),
                                   child: Text(accountNameFirstChar,
                                       style: const TextStyle(
                                           fontSize: 52,

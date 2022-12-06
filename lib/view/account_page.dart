@@ -267,7 +267,7 @@ class AccountsPageState extends State<AccountsPage> {
     }
     //print("getwidgetrow($showFilterViews)");
     return Container(
-        color: Colors.black54,
+        color: Color.fromARGB(248, 44, 44, 47),
         child: Row(
           children: <Widget>[
             getFilterSearch(),
@@ -326,7 +326,9 @@ class AccountsPageState extends State<AccountsPage> {
             child: const Text(
               "Drive",
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.blue),
+              style: TextStyle(
+                  color: Color.fromARGB(
+                      255, 50, 139, 73)), //.fromARGB(255, 5, 109, 158)),
             ),
           ));
     } else if (googleServiceNotifier.processingGoogleFile) {
@@ -582,7 +584,7 @@ class AccountsPageState extends State<AccountsPage> {
           title: const Text("BytePass"),
           toolbarHeight: 35.0,
           //bottom: ToolTab(googleServiceNotifier),
-          backgroundColor: Colors.black45, //Colors.amber,
+          backgroundColor: Color.fromARGB(248, 44, 44, 47), //Colors.amber,
         ),
         body: Column(children: <Widget>[
           getRequestAccessDialog(),
