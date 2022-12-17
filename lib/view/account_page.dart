@@ -10,6 +10,7 @@ import 'package:password_manager/view/decorated_table_page.dart';
 import 'package:password_manager/view/autocomplete_label.dart';
 import 'package:logging/logging.dart';
 
+import '../settings.dart';
 import 'account_grid_view.dart';
 import 'account_list_edit.dart';
 import 'account_list_view.dart';
@@ -255,6 +256,7 @@ class AccountsPageState extends State<AccountsPage> {
     //log.finer("getWidgetRow");
     //clearState();
     //var displayIcon = const Icon(Icons.account_circle_rounded, size: 55);
+    Settings settings = Settings();
     var displayIcon = const Icon(Icons.list_rounded, size: 55);
     if (showGridView) {
       displayIcon = const Icon(
@@ -267,7 +269,7 @@ class AccountsPageState extends State<AccountsPage> {
     }
     //print("getwidgetrow($showFilterViews)");
     return Container(
-        color: Color.fromARGB(248, 44, 44, 47),
+        color: settings.getHeaderColor(),
         child: Row(
           children: <Widget>[
             getFilterSearch(),
@@ -564,6 +566,7 @@ class AccountsPageState extends State<AccountsPage> {
     //var googleService = context.watch<GoogleService>();
 
     //log.finest("build()");
+    Settings settings = Settings();
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -584,7 +587,7 @@ class AccountsPageState extends State<AccountsPage> {
           title: const Text("BytePass"),
           toolbarHeight: 35.0,
           //bottom: ToolTab(googleServiceNotifier),
-          backgroundColor: Color.fromARGB(248, 44, 44, 47), //Colors.amber,
+          backgroundColor: settings.getHeaderColor(),
         ),
         body: Column(children: <Widget>[
           getRequestAccessDialog(),

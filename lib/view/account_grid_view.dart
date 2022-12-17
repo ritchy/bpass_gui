@@ -146,8 +146,8 @@ class CardWidget extends StatelessWidget {
 class NewAccountWidget extends StatelessWidget {
   AccountViewController acccountViewController;
   AccountItem item;
-  NewAccountWidget(this.item, this.acccountViewController, {super.key});
   Settings settings = Settings();
+  NewAccountWidget(this.item, this.acccountViewController, {super.key});
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -164,18 +164,21 @@ class NewAccountWidget extends StatelessWidget {
           children: <Widget>[
             ListTile(
               //leading: Icon(Icons.album),
-              title: const Text(
+              title: Text(
                 overflow: TextOverflow.ellipsis,
                 "New Account",
-                style:
-                    TextStyle(fontWeight: FontWeight.w600, color: Colors.black),
+                style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: settings.getForegroundColor()),
               ),
               subtitle: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  children: const <Widget>[
+                  children: <Widget>[
                     Align(
                         alignment: Alignment.centerLeft,
-                        child: Text('tap here')),
+                        child: Text('tap here',
+                            style: TextStyle(
+                                color: settings.getForegroundColor()))),
                     Align(alignment: Alignment.centerLeft, child: Text(''))
                   ]),
             )

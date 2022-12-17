@@ -20,8 +20,12 @@ class Settings {
       //transparent gray/blue
       return Color.fromARGB(146, 229, 229, 255);
     } else {
-      return Colors.black12;
+      return Color.fromARGB(248, 44, 44, 44); //Colors.amber,
     }
+  }
+
+  Color getHeaderColor() {
+    return Color.fromARGB(248, 44, 44, 47);
   }
 
   Color getForegroundColor() {
@@ -33,6 +37,10 @@ class Settings {
   }
 
   Color getAvatarColor() {
-    return const Color.fromARGB(255, 2, 51, 124);
+    if (lightTheme) {
+      return const Color.fromARGB(255, 2, 51, 124);
+    } else {
+      return const Color.fromARGB(255, 2, 51, 124);
+    }
   }
 }
