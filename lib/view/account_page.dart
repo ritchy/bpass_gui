@@ -29,6 +29,7 @@ class AccountsPageState extends State<AccountsPage> {
   AccountItem? selectedAccount;
   bool sortAscending = true;
   bool autoSelectColumn = false;
+  bool refreshView = false;
   bool showGridView = true;
   Settings settings = Settings();
   Color headerColor = Colors.black54;
@@ -475,9 +476,23 @@ class AccountsPageState extends State<AccountsPage> {
     );
   }
 
+  Future<void> refreshPage() async {
+    await Future.delayed(const Duration(milliseconds: 100), () {});
+    setState(() {
+      refreshView = false;
+    });
+  }
+
   Widget getMainStageWidget() {
     AccountItem? currentAccount =
         accountViewController.currentlySelectedAccount;
+
+    if (refreshView) {
+      refreshPage();
+      return new Container(
+        child: Text("Refresh"),
+      );
+    }
     if ((accountViewController.showAccountEditCardView ||
             accountViewController.showAccountCreateView) &&
         currentAccount != null) {
@@ -557,7 +572,7 @@ class AccountsPageState extends State<AccountsPage> {
     return Colors.black;
   }
 
-  Widget getDrawerWidget() {
+  Widget getDrawerWidget(BuildContext context) {
     return Drawer(
       child: ListView(
         // Important: Remove any padding from the ListView.
@@ -584,8 +599,10 @@ class AccountsPageState extends State<AccountsPage> {
                 log.info("Setting theme to amber");
                 Settings.theme = ByteTheme.amber;
                 headerColor = settings.getHeaderColor();
+                refreshView = true;
               });
-              //Navigator.pop(context);
+              Navigator.pop(context);
+              // Navigator.pushNamed(context, "/landing");
             },
           ),
           ListTile(
@@ -599,8 +616,9 @@ class AccountsPageState extends State<AccountsPage> {
                 log.info("Setting theme to yellow");
                 Settings.theme = ByteTheme.yellow;
                 headerColor = settings.getHeaderColor();
+                refreshView = true;
               });
-              //Navigator.pop(context);
+              Navigator.pop(context);
             },
           ),
           ListTile(
@@ -613,8 +631,9 @@ class AccountsPageState extends State<AccountsPage> {
               log.info("Setting theme to default");
               setState(() {
                 Settings.theme = ByteTheme.none;
+                refreshView = true;
               });
-              //Navigator.pop(context);
+              Navigator.pop(context);
             },
           ),
         ],
@@ -633,37 +652,38 @@ class AccountsPageState extends State<AccountsPage> {
     headerColor = settings.getHeaderColor();
 
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      routes: {
-        '/landing': (context) => DecoratedTablePage(
-              titleColumn: const ["Col 1", "Col 2"],
-              titleRow: const ["Row 1", "Row 2"],
-              data: const [],
+        debugShowCheckedModeBanner: false,
+        routes: {
+          '/landing': (context) => DecoratedTablePage(
+                titleColumn: const ["Col 1", "Col 2"],
+                titleRow: const ["Row 1", "Row 2"],
+                data: const [],
+              ),
+        },
+        home: Builder(
+          builder: (context) => Scaffold(
+            resizeToAvoidBottomInset: true,
+            appBar: AppBar(
+              //title: const Text(
+              //  'Accounts',
+              //  maxLines: 1,
+              //),
+              title: const Text("BytePass"),
+              toolbarHeight: 35.0,
+              //bottom: ToolTab(googleServiceNotifier),
+              backgroundColor: headerColor,
             ),
-      },
-      home: Scaffold(
-        resizeToAvoidBottomInset: true,
-        appBar: AppBar(
-          //title: const Text(
-          //  'Accounts',
-          //  maxLines: 1,
-          //),
-          title: const Text("BytePass"),
-          toolbarHeight: 35.0,
-          //bottom: ToolTab(googleServiceNotifier),
-          backgroundColor: headerColor,
-        ),
-        //drawer: getDrawerWidget(),
-        body: Column(children: <Widget>[
-          getRequestAccessDialog(),
-          getRequestDialog(),
-          getWidgetRow(),
-          getMainStageWidget(),
-          //Expanded(child: getTable()),
-          //const Expanded(child: AccountGridView()),
-        ]),
-      ),
-    );
+            drawer: getDrawerWidget(context),
+            body: Column(children: <Widget>[
+              getRequestAccessDialog(),
+              getRequestDialog(),
+              getWidgetRow(),
+              getMainStageWidget(),
+              //Expanded(child: getTable()),
+              //const Expanded(child: AccountGridView()),
+            ]),
+          ),
+        ));
   }
 
   void testAlert(BuildContext context) {
@@ -809,6 +829,18 @@ class TagEdit extends StatelessWidget {
   }
 }
 ***/
+
+class MyHome extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: TextButton(
+        child: Text("Foo"),
+        onPressed: () => Navigator.pushNamed(context, "/"),
+      ),
+    );
+  }
+}
 
 class TagDropdownButton extends StatefulWidget {
   const TagDropdownButton({super.key});
