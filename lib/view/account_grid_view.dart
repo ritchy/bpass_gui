@@ -79,6 +79,8 @@ class CardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //print('theme ${Settings.theme}');
+
     return Center(
         child: Card(
       color: settings.getBackgroundColor(),
@@ -116,7 +118,7 @@ class CardWidget extends StatelessWidget {
                           style: TextStyle(
                               //fontWeight: FontWeight.bold,
                               color: settings.getForegroundColor()),
-                        ))
+                        )),
                   ]),
             )
             /**** ,

@@ -1,28 +1,44 @@
 import 'package:flutter/material.dart';
 
-enum Theme { none, yellow, amber, light, dark }
+enum ByteTheme { none, yellow, amber, light, dark }
 
 class Settings {
-  var theme = Theme.none;
+  static var theme = ByteTheme.none;
 
-  void setTheme(Theme newTheme) {
-    theme = newTheme;
+  Color amberColor = const Color.fromARGB(255, 246, 197, 91);
+  Color yellowColor = const Color.fromARGB(255, 230, 218, 125);
+  Color lightColor = const Color.fromARGB(146, 229, 229, 255);
+  Color darkColor = const Color.fromARGB(248, 44, 44, 44);
+  Color defaultColor = const Color.fromARGB(146, 229, 229, 255);
+
+  Color getAmberColor() {
+    return amberColor;
+  }
+
+  Color getYellowColor() {
+    return yellowColor;
+  }
+
+  Color getDefaultColor() {
+    return defaultColor;
+  }
+
+  Color getLightColor() {
+    return lightColor;
   }
 
   Color getBackgroundColor() {
     switch (theme) {
-      case Theme.amber:
-        return const Color.fromARGB(255, 246, 197, 91);
-      case Theme.yellow:
-        return Color.fromARGB(255, 230, 218, 125);
-      case Theme.light:
-        return Color.fromARGB(146, 229, 229, 255);
-      case Theme.dark:
-        return Color.fromARGB(248, 44, 44, 44);
+      case ByteTheme.amber:
+        return amberColor;
+      case ByteTheme.yellow:
+        return yellowColor;
+      case ByteTheme.light:
+        return lightColor;
+      case ByteTheme.dark:
+        return darkColor;
       default:
-        //gray/slate
-        //return Color.fromARGB(248, 44, 44, 44);
-        return Color.fromARGB(146, 229, 229, 255);
+        return defaultColor;
     }
 
     //return Color.fromARGB(248, 223, 225, 231);
@@ -44,18 +60,23 @@ class Settings {
   }
 
   Color getHeaderColor() {
-    return Color.fromARGB(248, 44, 44, 47);
+    switch (theme) {
+      case ByteTheme.light:
+        return lightColor;
+      default:
+        return Color.fromARGB(248, 44, 44, 47);
+    }
   }
 
   Color getForegroundColor() {
     switch (theme) {
-      case Theme.amber:
+      case ByteTheme.amber:
         return Colors.black;
-      case Theme.yellow:
+      case ByteTheme.yellow:
         return Colors.black;
-      case Theme.light:
+      case ByteTheme.light:
         return Colors.black;
-      case Theme.dark:
+      case ByteTheme.dark:
         return Colors.white70;
       default:
         return Colors.black;
@@ -64,9 +85,9 @@ class Settings {
 
   Color getAvatarColor() {
     switch (theme) {
-      case Theme.amber:
+      case ByteTheme.amber:
         return const Color.fromARGB(255, 2, 51, 124);
-      case Theme.yellow:
+      case ByteTheme.yellow:
         return const Color.fromARGB(255, 2, 51, 124);
       default:
         return const Color.fromARGB(255, 2, 51, 124);

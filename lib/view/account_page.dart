@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:password_manager/main.dart';
 import 'package:password_manager/service/google_api.dart';
 import 'package:password_manager/service/google_service_notifier.dart';
@@ -29,6 +30,8 @@ class AccountsPageState extends State<AccountsPage> {
   bool sortAscending = true;
   bool autoSelectColumn = false;
   bool showGridView = true;
+  Settings settings = Settings();
+  Color headerColor = Colors.black54;
 
   final log = Logger('_AccountsPageState');
   AccountsPageState();
@@ -41,15 +44,6 @@ class AccountsPageState extends State<AccountsPage> {
       return Colors.amberAccent;
     } else {
       return Colors.transparent;
-    }
-  }
-
-  Color getBackgroundColor() {
-    bool lightTheme = true;
-    if (lightTheme) {
-      return Colors.white70;
-    } else {
-      return Colors.black54;
     }
   }
 
@@ -256,7 +250,7 @@ class AccountsPageState extends State<AccountsPage> {
     //log.finer("getWidgetRow");
     //clearState();
     //var displayIcon = const Icon(Icons.account_circle_rounded, size: 55);
-    Settings settings = Settings();
+    //Settings settings = Settings();
     var displayIcon = const Icon(Icons.list_rounded, size: 55);
     if (showGridView) {
       displayIcon = const Icon(
@@ -269,7 +263,7 @@ class AccountsPageState extends State<AccountsPage> {
     }
     //print("getwidgetrow($showFilterViews)");
     return Container(
-        color: settings.getHeaderColor(),
+        color: headerColor,
         child: Row(
           children: <Widget>[
             getFilterSearch(),
@@ -293,7 +287,7 @@ class AccountsPageState extends State<AccountsPage> {
               },
               padding: const EdgeInsets.fromLTRB(2, 2, 2, 2),
               icon: displayIcon,
-              color: getBackgroundColor(),
+              color: Colors.white70,
             ),
           ],
         ));
@@ -322,7 +316,7 @@ class AccountsPageState extends State<AccountsPage> {
       return SizedBox(
           height: 45,
           child: FloatingActionButton(
-            backgroundColor: getBackgroundColor(),
+            backgroundColor: Colors.white70,
             onPressed: () => handleGoogleDriveLogout(),
             tooltip: 'login',
             child: const Text(
@@ -337,7 +331,7 @@ class AccountsPageState extends State<AccountsPage> {
       return SizedBox(
           height: 45,
           child: FloatingActionButton(
-            backgroundColor: getBackgroundColor(),
+            backgroundColor: Colors.white70,
             onPressed: () => cancelGoogleDriveLogin(),
             tooltip: 'login',
             child: const CircularProgressIndicator(
@@ -348,7 +342,7 @@ class AccountsPageState extends State<AccountsPage> {
       return SizedBox(
           height: 45,
           child: FloatingActionButton(
-            backgroundColor: getBackgroundColor(),
+            backgroundColor: Colors.white70,
             onPressed: () => handleGoogleDriveLogin(),
             tooltip: 'login',
             child: const Text(
@@ -559,14 +553,84 @@ class AccountsPageState extends State<AccountsPage> {
     );
   }
 
+  Color getColor() {
+    return Colors.black;
+  }
+
+  Widget getDrawerWidget() {
+    return Drawer(
+      child: ListView(
+        // Important: Remove any padding from the ListView.
+        padding: EdgeInsets.zero,
+        children: [
+          const DrawerHeader(
+            decoration: BoxDecoration(
+              color: Color.fromARGB(248, 44, 44, 47),
+            ),
+            child: Text(
+                overflow: TextOverflow.ellipsis,
+                "Select Theme",
+                style: TextStyle(
+                    fontWeight: FontWeight.w600, color: Colors.white70)),
+          ),
+          ListTile(
+            leading: CircleAvatar(
+              radius: 10,
+              backgroundColor: settings.getAmberColor(),
+            ),
+            title: const Text('Amber'),
+            onTap: () {
+              setState(() {
+                log.info("Setting theme to amber");
+                Settings.theme = ByteTheme.amber;
+                headerColor = settings.getHeaderColor();
+              });
+              //Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            leading: CircleAvatar(
+              radius: 10,
+              backgroundColor: settings.getYellowColor(),
+            ),
+            title: const Text('Yellow'),
+            onTap: () {
+              setState(() {
+                log.info("Setting theme to yellow");
+                Settings.theme = ByteTheme.yellow;
+                headerColor = settings.getHeaderColor();
+              });
+              //Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            leading: CircleAvatar(
+              radius: 10,
+              backgroundColor: settings.getDefaultColor(),
+            ),
+            title: const Text('Default'),
+            onTap: () {
+              log.info("Setting theme to default");
+              setState(() {
+                Settings.theme = ByteTheme.none;
+              });
+              //Navigator.pop(context);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var accounts = context.watch<AccountViewController>();
     var googleServiceNotifier = context.watch<GoogleServiceNotifier>();
-    //var googleService = context.watch<GoogleService>();
 
+    //var googleService = context.watch<GoogleService>();
+    //Settings settings = Settings();
     //log.finest("build()");
-    Settings settings = Settings();
+    headerColor = settings.getHeaderColor();
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -587,8 +651,9 @@ class AccountsPageState extends State<AccountsPage> {
           title: const Text("BytePass"),
           toolbarHeight: 35.0,
           //bottom: ToolTab(googleServiceNotifier),
-          backgroundColor: settings.getHeaderColor(),
+          backgroundColor: headerColor,
         ),
+        //drawer: getDrawerWidget(),
         body: Column(children: <Widget>[
           getRequestAccessDialog(),
           getRequestDialog(),
