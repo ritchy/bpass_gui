@@ -489,8 +489,9 @@ class AccountsPageState extends State<AccountsPage> {
 
     if (refreshView) {
       refreshPage();
-      return new Container(
-        child: Text("Refresh"),
+      return Container(
+        padding: EdgeInsets.all(40),
+        child: Text("Refreshing ..."),
       );
     }
     if ((accountViewController.showAccountEditCardView ||

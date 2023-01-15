@@ -38,7 +38,7 @@ class AccountListEditViewState extends State<AccountListEditView> {
         //height: windowHeight - 510,
         //width: windowWidth - 10,
         child: Container(
-            color: Color.fromARGB(117, 213, 209, 209),
+            color: const Color.fromARGB(117, 213, 209, 209),
             child: ListView(
               padding: const EdgeInsets.fromLTRB(6, 2, 6, 2),
               children: <Widget>[
@@ -65,19 +65,11 @@ class AccountListEditViewState extends State<AccountListEditView> {
                               width: windowWidth,
                               child: Container(
                                   padding:
-                                      const EdgeInsets.fromLTRB(10, 5, 5, 5),
-                                  child: Text(
-                                      //overflow: TextOverflow.clip,
-                                      //overflow: TextOverflow.ellipsis,
-                                      softWrap: true,
-                                      //maxLines: 2,
-                                      item.name.isEmpty
-                                          ? "New Account"
-                                          : item.name,
-                                      //"Bank of America Jarbo",
-                                      style: const TextStyle(
-                                          fontSize: 28,
-                                          fontWeight: FontWeight.bold)))),
+                                      const EdgeInsets.fromLTRB(0, 5, 5, 5),
+                                  child: getTextWidget(
+                                      "Account Name", item.name,
+                                      onChanged: (value) =>
+                                          item.name = value))),
                         ])),
                 Container(
                     height: 50,

@@ -20,9 +20,10 @@ class AccountGridViewState extends State<AccountGridView> {
     var accountViewController = context.watch<AccountViewController>();
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    //pixel 2 size width: 411.42857142857144 height: 683.4285714285714
     //print("width: $width / height: $height");
     int axisCount = 3;
-    double aspectRatio = 3 / 1;
+    double aspectRatio = 3.1 / 1;
     if (width > 380 && width < 400) {
       axisCount = 2;
       aspectRatio = 1.8 / 1;
@@ -34,23 +35,35 @@ class AccountGridViewState extends State<AccountGridView> {
       axisCount = 2;
     } else if (width < 380) {
       axisCount = 1;
+    } else {
+      axisCount = 1;
     }
     if (width < 380) {
+      //|| height < 700) {
       return ListView(
           children: getChildrenCards(accountViewController.displayedAccounts));
     } else {
-      return Container(
-          color: Color.fromARGB(15, 99, 97, 95),
-          child: GridView.count(
-            scrollDirection: Axis.vertical,
-            mainAxisSpacing: 2,
-            crossAxisSpacing: 2,
-            padding: const EdgeInsets.all(10),
-            crossAxisCount: axisCount,
-            childAspectRatio: aspectRatio,
-            // Generate 100 widgets that display their index in the List.
-            children: getChildrenCards(accountViewController.displayedAccounts),
-          ));
+      try {
+        //print("trying grid...");
+        return Container(
+            color: Color.fromARGB(15, 99, 97, 95),
+            child: GridView.count(
+              scrollDirection: Axis.vertical,
+              mainAxisSpacing: 2,
+              crossAxisSpacing: 2,
+              padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
+              crossAxisCount: axisCount,
+              childAspectRatio: 2.5,
+              // Generate 100 widgets that display their index in the List.
+              children:
+                  getChildrenCards(accountViewController.displayedAccounts),
+            ));
+      } catch (e) {
+        print("problem showing grid($e), try a list!");
+        return ListView(
+            children:
+                getChildrenCards(accountViewController.displayedAccounts));
+      }
     }
   }
 
