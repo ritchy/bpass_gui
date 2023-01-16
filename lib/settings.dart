@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
-enum ByteTheme { none, yellow, amber, light, dark }
+enum ByteTheme { none, yellow, amber, sage, light, dark }
 
 class Settings {
   static var theme = ByteTheme.none;
 
   Color amberColor = const Color.fromARGB(255, 246, 197, 91);
   Color yellowColor = const Color.fromARGB(255, 230, 218, 125);
+  Color sageColor = const Color.fromARGB(255, 172, 189, 161);
   Color lightColor = const Color.fromARGB(146, 229, 229, 255);
   Color darkColor = const Color.fromARGB(248, 44, 44, 44);
   Color defaultColor = const Color.fromARGB(146, 229, 229, 255);
@@ -33,6 +34,8 @@ class Settings {
         return amberColor;
       case ByteTheme.yellow:
         return yellowColor;
+      case ByteTheme.sage:
+        return sageColor;
       case ByteTheme.light:
         return lightColor;
       case ByteTheme.dark:
@@ -73,6 +76,8 @@ class Settings {
       case ByteTheme.amber:
         return Colors.black;
       case ByteTheme.yellow:
+        return Colors.black;
+      case ByteTheme.sage:
         return Colors.black;
       case ByteTheme.light:
         return Colors.black;

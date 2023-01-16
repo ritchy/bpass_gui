@@ -625,6 +625,22 @@ class AccountsPageState extends State<AccountsPage> {
           ListTile(
             leading: CircleAvatar(
               radius: 10,
+              backgroundColor: settings.sageColor,
+            ),
+            title: const Text('Sage'),
+            onTap: () {
+              setState(() {
+                log.info("Setting theme to sage green");
+                Settings.theme = ByteTheme.sage;
+                headerColor = settings.getHeaderColor();
+                refreshView = true;
+              });
+              Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            leading: CircleAvatar(
+              radius: 10,
               backgroundColor: settings.getDefaultColor(),
             ),
             title: const Text('Default'),

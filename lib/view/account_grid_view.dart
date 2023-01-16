@@ -46,7 +46,7 @@ class AccountGridViewState extends State<AccountGridView> {
       try {
         //print("trying grid...");
         return Container(
-            color: Color.fromARGB(15, 99, 97, 95),
+            color: const Color.fromARGB(15, 99, 97, 95),
             child: GridView.count(
               scrollDirection: Axis.vertical,
               mainAxisSpacing: 2,
@@ -59,7 +59,7 @@ class AccountGridViewState extends State<AccountGridView> {
                   getChildrenCards(accountViewController.displayedAccounts),
             ));
       } catch (e) {
-        print("problem showing grid($e), try a list!");
+        log.severe("problem showing grid($e), try a list!");
         return ListView(
             children:
                 getChildrenCards(accountViewController.displayedAccounts));
