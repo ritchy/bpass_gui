@@ -30,8 +30,10 @@ void main(List<String> arguments) async {
     ],
     child: const AccountsPage(),
   ));
+  await loadSettings();
   setupWindow();
   loadAccountsFromFile();
+  //print("loading settings ....");
   //testWindowFunctions();
 }
 
@@ -56,6 +58,13 @@ Future<void> loadAccountsFromFile() async {
     await sink.close();
   }
   accountViewController.loadFile(file);
+}
+
+Future<void> loadSettings() async {
+  String appDocPath = await getAppDirPath();
+  String jsonDocumentPath = "$appDocPath${Platform.pathSeparator}settings.json";
+  log.info("loading settings from file: $jsonDocumentPath");
+  accountViewController.loadSettings(jsonDocumentPath);
 }
 
 Future<String> getAppDirPath() async {
@@ -87,7 +96,10 @@ void setupWindow() async {
     stdout.writeln(size);
     //await DesktopWindow.setMaxWindowSize(Size(800, 800));
     await DesktopWindow.setMinWindowSize(const Size(440, 640));
-    await DesktopWindow.setWindowSize(const Size(850, 640));
+    Size windowSize = accountViewController.getDefaultWindowSize();
+    //await DesktopWindow.setWindowSize(const Size(850, 640));
+    log.info("Setting window size $windowSize ...");
+    await DesktopWindow.setWindowSize(windowSize);
   }
 }
 

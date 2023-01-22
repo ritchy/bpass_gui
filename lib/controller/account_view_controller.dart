@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:password_manager/service/google_api.dart';
 import 'package:password_manager/model/accounts.dart';
 import 'package:logging/logging.dart';
-import 'dart:io';
 import 'package:password_manager/console.dart';
+import 'package:password_manager/settings.dart';
+import 'dart:io';
 
 class AccountViewController extends ChangeNotifier {
   Accounts accounts;
+  Settings settings = Settings();
   AccountItem? currentlySelectedAccount;
   String? currentTagSelection;
   List<AccountItem> displayedAccounts = [];
@@ -42,6 +44,25 @@ class AccountViewController extends ChangeNotifier {
     displayedAccounts = accounts.getAccountListCopy();
     insertBlankDisplayedAccount();
     notifyListeners();
+  }
+
+  void loadSettings(String settingsFilePath) async {
+    await settings.loadSettings(settingsFilePath);
+    notifyListeners();
+  }
+
+  Future<void> updateTheme(ByteTheme newTheme) async {
+    settings.updateTheme(newTheme);
+    notifyListeners();
+  }
+
+  Future<void> updateMainWindowSizeSetting(
+      double windowWidth, double windowHeight) async {
+    settings.updateMainWindowSizeSetting(windowWidth, windowHeight);
+  }
+
+  Size getDefaultWindowSize() {
+    return Size(settings.mainWindowWidth, settings.mainWindowHeight);
   }
 
   int getNumberOfDisplayedAccounts() {

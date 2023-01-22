@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
+import 'dart:convert';
+import 'package:logging/logging.dart';
 
 enum ByteTheme { none, yellow, amber, sage, light, dark }
 
 class Settings {
   static var theme = ByteTheme.none;
+  final log = Logger('_Settings');
+  late File settingsFile;
+  dynamic jsonMap = [];
 
   Color amberColor = const Color.fromARGB(255, 246, 197, 91);
   Color yellowColor = const Color.fromARGB(255, 230, 218, 125);
@@ -11,6 +17,10 @@ class Settings {
   Color lightColor = const Color.fromARGB(146, 229, 229, 255);
   Color darkColor = const Color.fromARGB(248, 44, 44, 44);
   Color defaultColor = const Color.fromARGB(146, 229, 229, 255);
+
+  //default window size Size(width:850, height:640)
+  double mainWindowWidth = 850;
+  double mainWindowHeight = 640;
 
   Color getAmberColor() {
     return amberColor;
@@ -97,5 +107,92 @@ class Settings {
       default:
         return const Color.fromARGB(255, 2, 51, 124);
     }
+  }
+
+  Future<void> updateTheme(ByteTheme newTheme) async {
+    theme = newTheme;
+    saveSettings();
+  }
+
+  Future<void> updateMainWindowSizeSetting(
+      double windowWidth, double windowHeight) async {
+    mainWindowWidth = windowWidth;
+    mainWindowHeight = windowHeight;
+    saveSettings();
+  }
+
+  //none, yellow, amber, sage, light, dark
+  void setThemeFromName(String themeName) {
+    if (themeName == "none") {
+      theme = ByteTheme.none;
+    } else if (themeName == "yellow") {
+      theme = ByteTheme.yellow;
+    } else if (themeName == "amber") {
+      theme = ByteTheme.amber;
+    } else if (themeName == "sage") {
+      theme = ByteTheme.sage;
+    } else {
+      theme = ByteTheme.none;
+    }
+  }
+
+  String getCurrentThemeName() {
+    switch (theme) {
+      case ByteTheme.amber:
+        return "amber";
+      case ByteTheme.yellow:
+        return "yellow";
+      case ByteTheme.sage:
+        return "sage";
+      case ByteTheme.light:
+        return "light";
+      case ByteTheme.dark:
+        return "dark";
+      default:
+        return "none";
+    }
+  }
+
+  Future<void> loadSettings(String settingsFilePath) async {
+    settingsFile = File(settingsFilePath);
+    if (settingsFile.existsSync()) {
+      final jsonString = await settingsFile.readAsString();
+      jsonMap = jsonDecode(jsonString);
+      setThemeFromName(getNamedSetting("color_theme"));
+      //print(jsonMap['main_window_height']);
+      if (jsonMap['main_window_height'] != null &&
+          jsonMap['main_window_width'] != null) {
+        mainWindowHeight = jsonMap['main_window_height'];
+        mainWindowWidth = jsonMap['main_window_width'];
+      }
+    } else {
+      log.warning("Settings file doesn't exist, creating ....");
+      settingsFile.createSync(recursive: true);
+      saveSettings();
+    }
+  }
+
+  Future<void> saveSettings() async {
+    JsonEncoder encoder = const JsonEncoder.withIndent('  ');
+    var sink = settingsFile.openWrite();
+    sink.write(encoder.convert(this));
+    // Close the IOSink to free system resources.
+    await sink.close();
+    print("saving ... ${encoder.convert(this)}");
+  }
+
+  String getNamedSetting(String settingName) {
+    return jsonMap[settingName];
+  }
+
+  Map<String, dynamic> toJson() {
+    //print("converting $this");
+    DateTime lastUpdated = DateTime.now();
+    final Map<String, dynamic> results = <String, dynamic>{};
+    results['last_updated'] = lastUpdated.toString();
+    results['color_theme'] = getCurrentThemeName();
+    results['main_window_height'] = mainWindowHeight;
+    results['main_window_width'] = mainWindowWidth;
+    return results;
   }
 }

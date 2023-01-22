@@ -631,10 +631,11 @@ class AccountsPageState extends State<AccountsPage> {
             onTap: () {
               setState(() {
                 log.info("Setting theme to sage green");
-                Settings.theme = ByteTheme.sage;
-                headerColor = settings.getHeaderColor();
-                refreshView = true;
+                //Settings.theme = ByteTheme.sage;
+                //headerColor = settings.getHeaderColor();
+                //refreshView = true;
               });
+              accountViewController.updateTheme(ByteTheme.sage);
               Navigator.pop(context);
             },
           ),

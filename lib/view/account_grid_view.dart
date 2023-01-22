@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:googleapis/servicemanagement/v1.dart';
 import 'package:password_manager/settings.dart';
 //import 'package:googleapis/calendar/v3.dart';
 //import 'package:flutter/src/material/colors.dart';
@@ -15,30 +16,35 @@ class AccountGridView extends StatefulWidget {
 }
 
 class AccountGridViewState extends State<AccountGridView> {
+  bool savingSettings = false;
+  double windowWidth = -1;
+  double windowHeight = -1;
   @override
   Widget build(BuildContext context) {
     var accountViewController = context.watch<AccountViewController>();
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
+    windowWidth = MediaQuery.of(context).size.width;
+    windowHeight = MediaQuery.of(context).size.height;
+
     //pixel 2 size width: 411.42857142857144 height: 683.4285714285714
     //print("width: $width / height: $height");
+    saveWindowSizeSettings();
     int axisCount = 3;
     double aspectRatio = 3.1 / 1;
-    if (width > 380 && width < 400) {
+    if (windowWidth > 380 && windowWidth < 400) {
       axisCount = 2;
       aspectRatio = 1.8 / 1;
-    } else if (width > 870) {
+    } else if (windowWidth > 870) {
       axisCount = 4;
-    } else if (width < 870 && width > 650) {
+    } else if (windowWidth < 870 && windowWidth > 650) {
       axisCount = 3;
-    } else if (width < 650 && width > 380) {
+    } else if (windowWidth < 650 && windowWidth > 380) {
       axisCount = 2;
-    } else if (width < 380) {
+    } else if (windowWidth < 380) {
       axisCount = 1;
     } else {
       axisCount = 1;
     }
-    if (width < 380) {
+    if (windowWidth < 380) {
       //|| height < 700) {
       return ListView(
           children: getChildrenCards(accountViewController.displayedAccounts));
@@ -64,6 +70,20 @@ class AccountGridViewState extends State<AccountGridView> {
             children:
                 getChildrenCards(accountViewController.displayedAccounts));
       }
+    }
+  }
+
+  Future<void> saveWindowSizeSettings() async {
+    if (savingSettings) {
+      print("delayed ..");
+      return;
+    } else {
+      savingSettings = true;
+      await Future.delayed(const Duration(milliseconds: 10000), () {});
+      log.info("Saving window size to $windowWidth/$windowHeight ...");
+      await accountViewController.updateMainWindowSizeSetting(
+          windowWidth, windowHeight);
+      savingSettings = false;
     }
   }
 
