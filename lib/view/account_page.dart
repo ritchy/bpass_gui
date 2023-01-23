@@ -597,11 +597,12 @@ class AccountsPageState extends State<AccountsPage> {
             title: const Text('Amber'),
             onTap: () {
               setState(() {
-                log.info("Setting theme to amber");
-                Settings.theme = ByteTheme.amber;
-                headerColor = settings.getHeaderColor();
-                refreshView = true;
+                //Settings.theme = ByteTheme.amber;
+                //headerColor = settings.getHeaderColor();
+                //refreshView = true;
               });
+              log.info("Setting theme to amber");
+              accountViewController.updateTheme(ByteTheme.amber);
               Navigator.pop(context);
               // Navigator.pushNamed(context, "/landing");
             },
@@ -614,11 +615,12 @@ class AccountsPageState extends State<AccountsPage> {
             title: const Text('Yellow'),
             onTap: () {
               setState(() {
-                log.info("Setting theme to yellow");
-                Settings.theme = ByteTheme.yellow;
-                headerColor = settings.getHeaderColor();
-                refreshView = true;
+                //Settings.theme = ByteTheme.yellow;
+                //headerColor = settings.getHeaderColor();
+                //refreshView = true;
               });
+              log.info("Setting theme to yellow");
+              accountViewController.updateTheme(ByteTheme.yellow);
               Navigator.pop(context);
             },
           ),
@@ -630,11 +632,11 @@ class AccountsPageState extends State<AccountsPage> {
             title: const Text('Sage'),
             onTap: () {
               setState(() {
-                log.info("Setting theme to sage green");
                 //Settings.theme = ByteTheme.sage;
                 //headerColor = settings.getHeaderColor();
                 //refreshView = true;
               });
+              log.info("Setting theme to sage green");
               accountViewController.updateTheme(ByteTheme.sage);
               Navigator.pop(context);
             },
@@ -646,11 +648,12 @@ class AccountsPageState extends State<AccountsPage> {
             ),
             title: const Text('Default'),
             onTap: () {
-              log.info("Setting theme to default");
               setState(() {
-                Settings.theme = ByteTheme.none;
-                refreshView = true;
+                //Settings.theme = ByteTheme.none;
+                //refreshView = true;
               });
+              log.info("Setting theme to default");
+              accountViewController.updateTheme(ByteTheme.none);
               Navigator.pop(context);
             },
           ),

@@ -178,7 +178,8 @@ class Settings {
     sink.write(encoder.convert(this));
     // Close the IOSink to free system resources.
     await sink.close();
-    print("saving ... ${encoder.convert(this)}");
+    log.info("Saving settings ...");
+    //print("saving ... ${encoder.convert(this)}");
   }
 
   String getNamedSetting(String settingName) {

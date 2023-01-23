@@ -75,7 +75,7 @@ class AccountGridViewState extends State<AccountGridView> {
 
   Future<void> saveWindowSizeSettings() async {
     if (savingSettings) {
-      print("delayed ..");
+      //print("delayed ..");
       return;
     } else {
       savingSettings = true;
