@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:password_manager/main.dart';
 import '../model/accounts.dart';
-import 'package:super_tag_editor/tag_editor.dart';
 import 'package:password_manager/settings.dart';
+import 'package:password_manager/view/account_tag_editor.dart';
 
 /// View of account details that includes:
 /// Account Name, user, email password and hint
@@ -236,7 +236,11 @@ class AccountListEditViewState extends State<AccountListEditView> {
     return SizedBox(
         width: windowWidth = 10,
         //height: 120,
-        child: TagEditor(
+        //child: TextField());
+        child: AccountTagEditor());
+
+    /****
+        *  child: TagEditor(
             length: tags.length,
             delimiters: const [',', ' '],
             hasAddButton: true,
@@ -265,13 +269,14 @@ class AccountListEditViewState extends State<AccountListEditView> {
                   key: ObjectKey(data),
                   title: Text(data.toString()),
                   onTap: () {
-                    state.selectSuggestion(data);
+                    //state.selectSuggestion(data);
                   },
                 ),
             suggestionsBoxElevation: 10,
             findSuggestions: (String query) {
               return [];
             }));
+    ****/
   }
 }
 
