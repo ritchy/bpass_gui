@@ -56,8 +56,9 @@ class _AccountTagEditor extends State<AccountTagEditor> {
       delimiters: const [',', ' '],
       hasAddButton: true,
       resetTextOnSubmitted: true,
+      textAlign: TextAlign.left,
       // This is set to grey just to illustrate the `textStyle` prop
-      textStyle: const TextStyle(color: Colors.grey),
+      //textStyle: const TextStyle(color: Colors.blue),
       onSubmitted: (outstandingValue) {
         setState(() {
           _values.add(outstandingValue);
@@ -65,7 +66,7 @@ class _AccountTagEditor extends State<AccountTagEditor> {
       },
       inputDecoration: const InputDecoration(
         border: InputBorder.none,
-        hintText: 'Enter Tag Names ...',
+        hintText: 'Enter Tag ...',
       ),
       onTagChanged: (newValue) {
         setState(() {
@@ -73,9 +74,10 @@ class _AccountTagEditor extends State<AccountTagEditor> {
         });
       },
       tagBuilder: (context, index) => Container(
+        padding: const EdgeInsets.fromLTRB(0, 5, 2, 0),
         color: focusTagEnabled && index == _values.length - 1
             ? Colors.redAccent
-            : Colors.white,
+            : Colors.transparent,
         child: _Chip(
           index: index,
           label: _values[index],
@@ -170,6 +172,7 @@ class _Chip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Chip(
+      backgroundColor: Colors.white,
       labelPadding: const EdgeInsets.only(left: 8.0),
       label: Text(label),
       deleteIcon: const Icon(
