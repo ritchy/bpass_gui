@@ -237,7 +237,7 @@ class AccountListEditViewState extends State<AccountListEditView> {
         width: windowWidth = 10,
         //height: 120,
         //child: TextField());
-        child: AccountTagEditor());
+        child: AccountTagEditor(tags));
 
     /****
         *  child: TagEditor(

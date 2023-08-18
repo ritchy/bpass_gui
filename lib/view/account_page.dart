@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:password_manager/main.dart';
 import 'package:password_manager/service/google_api.dart';
 import 'package:password_manager/service/google_service_notifier.dart';
@@ -224,7 +223,7 @@ class AccountsPageState extends State<AccountsPage> {
     return Visibility(
         visible: showFilterViews,
         child: Row(children: [
-          Container(
+          SizedBox(
               //color: Colors.amber,
               height: 55,
               child: TextButton(
@@ -240,9 +239,9 @@ class AccountsPageState extends State<AccountsPage> {
           Container(
             //width: 100.0,
             //color: Colors.amber,
-            padding: EdgeInsets.all(2),
+            padding: const EdgeInsets.all(2),
             height: 37,
-            child: TagDropdownButton(),
+            child: const TagDropdownButton(),
           ),
         ]));
   }
@@ -490,8 +489,8 @@ class AccountsPageState extends State<AccountsPage> {
     if (refreshView) {
       refreshPage();
       return Container(
-        padding: EdgeInsets.all(40),
-        child: Text("Refreshing ..."),
+        padding: const EdgeInsets.all(40),
+        child: const Text("Refreshing ..."),
       );
     }
     if ((accountViewController.showAccountEditCardView ||
@@ -675,10 +674,10 @@ class AccountsPageState extends State<AccountsPage> {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         routes: {
-          '/landing': (context) => DecoratedTablePage(
-                titleColumn: const ["Col 1", "Col 2"],
-                titleRow: const ["Row 1", "Row 2"],
-                data: const [],
+          '/landing': (context) => const DecoratedTablePage(
+                titleColumn: ["Col 1", "Col 2"],
+                titleRow: ["Row 1", "Row 2"],
+                data: [],
               ),
         },
         home: Builder(
@@ -727,9 +726,9 @@ class AccountsPageState extends State<AccountsPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('AlertDialog Title'),
-          content: SingleChildScrollView(
+          content: const SingleChildScrollView(
             child: Column(
-              children: const <Widget>[
+              children: <Widget>[
                 Text('This is a demo alert dialog.'),
                 Text('Would you like to confirm this message?'),
               ],
@@ -852,11 +851,13 @@ class TagEdit extends StatelessWidget {
 ***/
 
 class MyHome extends StatelessWidget {
+  const MyHome({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Center(
       child: TextButton(
-        child: Text("Foo"),
+        child: const Text("Foo"),
         onPressed: () => Navigator.pushNamed(context, "/"),
       ),
     );

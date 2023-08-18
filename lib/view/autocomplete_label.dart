@@ -137,8 +137,8 @@ class AutocompleteLabelController<T> extends ChangeNotifier {
   AutocompleteLabelController({
     List<T>? source,
     List<T>? values,
-  })  : this._source = source ?? [],
-        this.values = values ?? [];
+  })  : _source = source ?? [],
+        values = values ?? [];
 
   static const _none = -1;
 
@@ -200,7 +200,7 @@ class AutocompleteLabelController<T> extends ChangeNotifier {
   /// Remove the last value in [values]
   /// and this class notifies its listeners
   void removeLast() {
-    if (0 == values.length) return;
+    if (values.isEmpty) return;
     values.removeLast();
     notifyListeners();
   }
@@ -415,10 +415,10 @@ class AutocompleteLabel<T> extends StatefulWidget {
     this.keepAutofocus = true,
     this.displayStringForOption = defaultStringForOption,
     this.optionBoxDirection,
-  })  : this.focusNode = focusNode ?? FocusNode(),
-        this.autocompleteLabelController =
+  })  : focusNode = focusNode ?? FocusNode(),
+        autocompleteLabelController =
             autocompleteLabelController ?? AutocompleteLabelController(),
-        this.textEditingController =
+        textEditingController =
             textEditingController ?? TextEditingController(),
         super(key: key);
 
@@ -431,13 +431,13 @@ class AutocompleteLabel<T> extends StatefulWidget {
       borderRadius: BorderRadius.circular(10),
       onTap: () => onDeleted(index),
       child: Padding(
-        padding: EdgeInsets.all(5),
+        padding: const EdgeInsets.all(5),
         child: Wrap(
           crossAxisAlignment: WrapCrossAlignment.center,
           children: [
             Text(value.toString(),
-                style: TextStyle(fontSize: _defaultFontSize)),
-            Icon(
+                style: const TextStyle(fontSize: _defaultFontSize)),
+            const Icon(
               Icons.close,
               size: _defaultFontSize,
             ),
@@ -463,7 +463,7 @@ class AutocompleteLabel<T> extends StatefulWidget {
     valueItems.add(textField);
 
     return Container(
-      padding: EdgeInsets.fromLTRB(0, 0, 0, 3),
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, 3),
       decoration: const BoxDecoration(
         border: Border(
             bottom: BorderSide(
@@ -490,7 +490,7 @@ class AutocompleteLabel<T> extends StatefulWidget {
     return InkWell(
       onTap: () => onSelected(index),
       child: Container(
-        padding: EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(10.0),
         color: isHighlight ? Colors.grey[350] : null,
         child: Text(option.toString()),
       ),
@@ -585,14 +585,14 @@ class _AutocompleteLabelState<T> extends State<AutocompleteLabel> {
 
   bool isOpened = false;
   bool _isSelectOption = false;
-  GlobalKey _textFieldKey = GlobalKey();
+  final GlobalKey _textFieldKey = GlobalKey();
 
   String _oldValue = "";
 
   void _openOptionBox() {
     if (this.isOpened) return;
     assert(this._overlayEntry != null);
-    Overlay.of(context)!.insert(this._overlayEntry!);
+    Overlay.of(context).insert(this._overlayEntry!);
     this.isOpened = true;
   }
 
@@ -616,7 +616,7 @@ class _AutocompleteLabelState<T> extends State<AutocompleteLabel> {
     widget.autocompleteLabelController.addListener(_handleValuesChanged);
     widget.textEditingController.addListener(_handleTextChanged);
     _offsetDetectorController = OffsetDetectorController();
-    SchedulerBinding.instance!.addPostFrameCallback((duration) {
+    SchedulerBinding.instance.addPostFrameCallback((duration) {
       if (mounted) {
         _overlayEntry = _createOverlayEntry();
       }
@@ -642,7 +642,7 @@ class _AutocompleteLabelState<T> extends State<AutocompleteLabel> {
       oldWidget.textEditingController.removeListener(_handleTextChanged);
       widget.textEditingController.addListener(_handleTextChanged);
     }
-    SchedulerBinding.instance!.addPostFrameCallback((Duration _) {
+    SchedulerBinding.instance.addPostFrameCallback((Duration _) {
       _updateOptionBox();
     });
   }
@@ -829,7 +829,7 @@ class _AutocompleteLabelState<T> extends State<AutocompleteLabel> {
       _handleOptionsBuilder(value);
     }
 
-    if (0 < widget.autocompleteLabelController._options.length) {
+    if (widget.autocompleteLabelController._options.isNotEmpty) {
       _openOptionBox();
       _offsetDetectorController.notifyStateChanged();
     }
@@ -868,7 +868,7 @@ class _AutocompleteLabelState<T> extends State<AutocompleteLabel> {
   }
 
   void _onKeyDownEvent(RawKeyEvent value) {
-    if (!(value is RawKeyDownEvent)) return;
+    if (value is! RawKeyDownEvent) return;
 
     if (widget.textEditingController.text == "" &&
         value.logicalKey == LogicalKeyboardKey.backspace) {
@@ -886,7 +886,7 @@ class _AutocompleteLabelState<T> extends State<AutocompleteLabel> {
   }
 
   void _onKeyUpEvent(RawKeyEvent value) {
-    if (!(value is RawKeyUpEvent)) return;
+    if (value is! RawKeyUpEvent) return;
 
     if (value.logicalKey == LogicalKeyboardKey.arrowUp) {
       if (!isOpened) return;
@@ -900,10 +900,11 @@ class _AutocompleteLabelState<T> extends State<AutocompleteLabel> {
   }
 
   void _handleFocusChanged() {
-    if (widget.focusNode.hasFocus)
+    if (widget.focusNode.hasFocus) {
       _attachKeyboardIfDetached();
-    else
+    } else {
       _detachKeyboardIfAttached();
+    }
   }
 
   bool _listening = false;

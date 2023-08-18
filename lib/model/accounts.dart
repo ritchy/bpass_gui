@@ -465,7 +465,7 @@ class AccountItem {
 
   Map<String, dynamic> toJson() {
     lastUpdated ??= DateTime.now();
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['name'] = name;
     data['last_updated'] = lastUpdated.toString();
     data['status'] = status;

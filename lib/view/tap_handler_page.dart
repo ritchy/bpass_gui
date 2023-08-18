@@ -3,7 +3,7 @@ import 'package:table_sticky_headers/table_sticky_headers.dart';
 
 class TapHandlerPage extends StatefulWidget {
   TapHandlerPage(
-      {required this.data, required this.titleColumn, required this.titleRow});
+      {super.key, required this.data, required this.titleColumn, required this.titleRow});
 
   List<List<String>> data;
   final List<String> titleColumn;
@@ -36,7 +36,7 @@ class _TapHandlerPageState extends State<TapHandlerPage> {
   Widget build(BuildContext context) => MaterialApp(
         home: Scaffold(
           appBar: AppBar(
-            title: Text(
+            title: const Text(
               'Tap handler example: highlight selected cell with row & column',
               maxLines: 2,
             ),
@@ -46,18 +46,14 @@ class _TapHandlerPageState extends State<TapHandlerPage> {
             columnsLength: widget.titleColumn.length,
             rowsLength: widget.titleRow.length,
             columnsTitleBuilder: (i) => TextButton(
-              child: Text(widget.titleColumn[i]),
               onPressed: clearState,
+              child: Text(widget.titleColumn[i]),
             ),
             rowsTitleBuilder: (i) => TextButton(
-              child: Text(widget.titleRow[i]),
               onPressed: clearState,
+              child: Text(widget.titleRow[i]),
             ),
             contentCellBuilder: (i, j) => ElevatedButton(
-              child: Text(
-                widget.data[i][j],
-                style: TextStyle(color: Colors.black),
-              ),
               style: ButtonStyle(
                   backgroundColor:
                       MaterialStateProperty.all(getContentColor(i, j)),
@@ -67,10 +63,14 @@ class _TapHandlerPageState extends State<TapHandlerPage> {
                 selectedColumn = j;
                 selectedRow = i;
               }),
+              child: Text(
+                widget.data[i][j],
+                style: const TextStyle(color: Colors.black),
+              ),
             ),
             legendCell: TextButton(
-              child: Text('Sticky Legend'),
               onPressed: clearState,
+              child: const Text('Sticky Legend'),
             ),
           ),
         ),

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:table_sticky_headers/table_sticky_headers.dart';
 
 class DecoratedTablePage extends StatelessWidget {
-  DecoratedTablePage(
-      {required this.data, required this.titleColumn, required this.titleRow});
+  const DecoratedTablePage(
+      {super.key, required this.data, required this.titleColumn, required this.titleRow});
 
   final List<List<String>> data;
   final List<String> titleColumn;
@@ -15,7 +15,7 @@ class DecoratedTablePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Sticky Headers Two-Dimension  Table decorated',
           maxLines: 2,
         ),
@@ -26,19 +26,19 @@ class DecoratedTablePage extends StatelessWidget {
         rowsLength: titleRow.length,
         columnsTitleBuilder: (i) => TableCell.stickyRow(
           titleColumn[i],
-          textStyle: textTheme.button!.copyWith(fontSize: 15.0),
+          textStyle: textTheme.labelLarge!.copyWith(fontSize: 15.0),
         ),
         rowsTitleBuilder: (i) => TableCell.stickyColumn(
           titleRow[i],
-          textStyle: textTheme.button!.copyWith(fontSize: 15.0),
+          textStyle: textTheme.labelLarge!.copyWith(fontSize: 15.0),
         ),
         contentCellBuilder: (i, j) => TableCell.content(
           data[i][j],
-          textStyle: textTheme.bodyText2!.copyWith(fontSize: 12.0),
+          textStyle: textTheme.bodyMedium!.copyWith(fontSize: 12.0),
         ),
         legendCell: TableCell.legend(
           'Sticky Legend',
-          textStyle: textTheme.button!.copyWith(fontSize: 16.5),
+          textStyle: textTheme.labelLarge!.copyWith(fontSize: 16.5),
         ),
       ),
     );
@@ -47,7 +47,7 @@ class DecoratedTablePage extends StatelessWidget {
 
 class TableCell extends StatelessWidget {
   TableCell.content(
-    this.text, {
+    this.text, {super.key, 
     this.textStyle,
     this.cellDimensions = CellDimensions.base,
     this.colorBg = Colors.white,
@@ -60,7 +60,7 @@ class TableCell extends StatelessWidget {
         _padding = EdgeInsets.zero;
 
   TableCell.legend(
-    this.text, {
+    this.text, {super.key, 
     this.textStyle,
     this.cellDimensions = CellDimensions.base,
     this.colorBg = Colors.amber,
@@ -70,10 +70,10 @@ class TableCell extends StatelessWidget {
         _colorHorizontalBorder = Colors.white,
         _colorVerticalBorder = Colors.amber,
         _textAlign = TextAlign.start,
-        _padding = EdgeInsets.only(left: 24.0);
+        _padding = const EdgeInsets.only(left: 24.0);
 
   TableCell.stickyRow(
-    this.text, {
+    this.text, {super.key, 
     this.textStyle,
     this.cellDimensions = CellDimensions.base,
     this.colorBg = Colors.amber,
@@ -86,7 +86,7 @@ class TableCell extends StatelessWidget {
         _padding = EdgeInsets.zero;
 
   TableCell.stickyColumn(
-    this.text, {
+    this.text, {super.key, 
     this.textStyle,
     this.cellDimensions = CellDimensions.base,
     this.colorBg = Colors.white,
@@ -96,7 +96,7 @@ class TableCell extends StatelessWidget {
         _colorHorizontalBorder = Colors.amber,
         _colorVerticalBorder = Colors.black38,
         _textAlign = TextAlign.start,
-        _padding = EdgeInsets.only(left: 24.0);
+        _padding = const EdgeInsets.only(left: 24.0);
 
   final CellDimensions cellDimensions;
 
@@ -123,12 +123,18 @@ class TableCell extends StatelessWidget {
         width: cellWidth,
         height: cellHeight,
         padding: _padding,
+        decoration: BoxDecoration(
+            border: Border(
+              left: BorderSide(color: _colorHorizontalBorder),
+              right: BorderSide(color: _colorHorizontalBorder),
+            ),
+            color: colorBg),
         child: Column(
           children: <Widget>[
             Expanded(
               child: Container(
                 alignment: Alignment.center,
-                padding: EdgeInsets.symmetric(horizontal: 2.0),
+                padding: const EdgeInsets.symmetric(horizontal: 2.0),
                 child: Text(
                   text,
                   style: textStyle,
@@ -144,12 +150,6 @@ class TableCell extends StatelessWidget {
             ),
           ],
         ),
-        decoration: BoxDecoration(
-            border: Border(
-              left: BorderSide(color: _colorHorizontalBorder),
-              right: BorderSide(color: _colorHorizontalBorder),
-            ),
-            color: colorBg),
       ),
     );
   }

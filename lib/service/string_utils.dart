@@ -6,7 +6,7 @@ import 'dart:math';
 /// Helper class for String operations
 ///
 class StringUtils {
-  static AsciiCodec asciiCodec = AsciiCodec();
+  static AsciiCodec asciiCodec = const AsciiCodec();
 
   static final RegExp _ipv4Maybe =
       RegExp(r'^(\d?\d?\d)\.(\d?\d?\d)\.(\d?\d?\d)\.(\d?\d?\d)$');
@@ -38,7 +38,7 @@ class StringUtils {
   static String camelCaseToUpperUnderscore(String s) {
     var sb = StringBuffer();
     var first = true;
-    s.runes.forEach((int rune) {
+    for (var rune in s.runes) {
       var char = String.fromCharCode(rune);
       if (isUpperCase(char) && !first) {
         sb.write('_');
@@ -47,7 +47,7 @@ class StringUtils {
         first = false;
         sb.write(char.toUpperCase());
       }
-    });
+    }
     return sb.toString();
   }
 
@@ -58,7 +58,7 @@ class StringUtils {
   static String camelCaseToLowerUnderscore(String s) {
     var sb = StringBuffer();
     var first = true;
-    s.runes.forEach((int rune) {
+    for (var rune in s.runes) {
       var char = String.fromCharCode(rune);
       if (isUpperCase(char) && !first) {
         if (char != '_') {
@@ -69,7 +69,7 @@ class StringUtils {
         first = false;
         sb.write(char.toLowerCase());
       }
-    });
+    }
     return sb.toString();
   }
 
@@ -437,7 +437,7 @@ class StringUtils {
     var a = 'ABCDEFGHIJKLMNOPQRXYZ';
     var la = 'abcdefghijklmnopqrxyz';
     var b = '0123456789';
-    var c = '~^!@#\$%^&*;`(=?]:[.)_+-|\{}';
+    var c = '~^!@#\$%^&*;`(=?]:[.)_+-|{}';
     var result = '';
 
     if (alphabet) {

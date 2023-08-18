@@ -196,7 +196,7 @@ class AccountListView extends StatelessWidget {
                       //padding: const EdgeInsets.all(2),
                       margin: const EdgeInsets.all(2),
                       padding: const EdgeInsets.fromLTRB(2, 2, 2, 5),
-                      child: Text("Notes:",
+                      child: const Text("Notes:",
                           textAlign: TextAlign.start,
                           style: TextStyle(
                               fontSize: 12,
@@ -318,13 +318,13 @@ class AccountListView extends StatelessWidget {
   void showAlertDialog(BuildContext context) {
     // set up the buttons
     Widget cancelButton = TextButton(
-      child: Text("Cancel Delete"),
+      child: const Text("Cancel Delete"),
       onPressed: () {
         Navigator.of(context).pop();
       },
     );
     Widget continueButton = TextButton(
-      child: Text("Yes Delete"),
+      child: const Text("Yes Delete"),
       onPressed: () {
         handleDelete();
         Navigator.of(context).pop();
@@ -334,7 +334,7 @@ class AccountListView extends StatelessWidget {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Delete ${item.name}?"),
-      content: Text("Are you sure you want to delete?"),
+      content: const Text("Are you sure you want to delete?"),
       actions: [
         cancelButton,
         continueButton,
@@ -372,7 +372,7 @@ class AccountListView extends StatelessWidget {
             child: const Text(
               "-->Copy<--",
               textAlign: TextAlign.start,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
             ),
             onPressed: () {
               Clipboard.setData(ClipboardData(text: value));
@@ -395,7 +395,7 @@ class AccountListView extends StatelessWidget {
 
   Widget getVerticalPasswordSection(
       String name, String value, BuildContext context) {
-    return Container(
+    return SizedBox(
         height: 60,
         //decoration:
         //    BoxDecoration(border: Border.all(width: 2, color: Colors.black38)),

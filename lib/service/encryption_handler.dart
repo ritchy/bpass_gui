@@ -6,11 +6,8 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 import 'dart:convert';
-import 'dart:math';
-import 'dart:typed_data';
 
 import 'package:pointycastle/asn1/object_identifiers.dart';
-import 'package:pointycastle/export.dart';
 import 'package:pointycastle/pointycastle.dart';
 import 'package:pointycastle/src/utils.dart';
 import 'package:pointycastle/ecc/ecc_fp.dart' as ecc_fp;
@@ -124,7 +121,7 @@ Future<AsymmetricKeyPair?> retriveKeysFromFile(
 
   final publicKey =
       RSAPublicKey(publicKeyParser.modulus!, publicKeyParser.exponent!);
-  final privKey;
+  final RSAPrivateKey privKey;
   log.info("load the correct private key? $privateKeyParser");
   if (privateKeyParser is RSAPrivateKey) {
     privKey = RSAPrivateKey(privateKeyParser.modulus!,
@@ -226,7 +223,7 @@ Future<String> encryptWithProvidedKey(
   final publicKey =
       RSAPublicKey(publicKeyParser.modulus!, publicKeyParser.exponent!);
 
-  final rsaPublicKey = publicKey as RSAPublicKey;
+  final rsaPublicKey = publicKey;
   final encrypter = encrypt.Encrypter(encrypt.RSA(publicKey: rsaPublicKey));
   var encrypted = encrypter.encrypt(content);
   return encrypted.base64;
@@ -328,7 +325,7 @@ Future<String> loadAndUnencryptContentRSA(String publicPemFilePath,
     final privateKey = pair.privateKey as RSAPrivateKey;
     final encrypter = encrypt.Encrypter(
         encrypt.RSA(publicKey: publicKey, privateKey: privateKey));
-    File file = new File(filePath);
+    File file = File(filePath);
     String decryptedString = "";
     if (file.existsSync()) {
       Uint8List bytes = await file.readAsBytes();
@@ -835,7 +832,7 @@ class CryptoUtils {
         .map((line) => line.trim())
         .where((line) => line.isNotEmpty)
         .toList();
-    var base64;
+    String base64;
     if (checkHeader) {
       if (lines.length < 2 ||
           !lines.first.startsWith('-----BEGIN') ||
@@ -865,7 +862,7 @@ class CryptoUtils {
   static RSAPublicKey rsaPublicKeyFromDERBytes(Uint8List bytes) {
     var asn1Parser = ASN1Parser(bytes);
     var topLevelSeq = asn1Parser.nextObject() as ASN1Sequence;
-    var publicKeySeq;
+    ASN1Sequence publicKeySeq;
     if (topLevelSeq.elements![1].runtimeType == ASN1BitString) {
       var publicKeyBitString = topLevelSeq.elements![1] as ASN1BitString;
 
@@ -1021,7 +1018,7 @@ class CryptoUtils {
     var asn1Parser = ASN1Parser(bytes);
     var topLevelSeq = asn1Parser.nextObject() as ASN1Sequence;
     var curveName;
-    var x;
+    Uint8List x;
     if (pkcs8) {
       // Parse the PKCS8 format
       var innerSeq = topLevelSeq.elements!.elementAt(1) as ASN1Sequence;

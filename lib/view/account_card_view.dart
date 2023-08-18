@@ -165,7 +165,7 @@ class AccountCardView extends StatelessWidget {
   }
 
   Widget getPrimarySection() {
-    List<String> tags = (item == null || item.tags.isEmpty) ? [] : item.tags;
+    List<String> tags = (item.tags.isEmpty) ? [] : item.tags;
     String tagString = tags.join(', ');
 
     return SizedBox(

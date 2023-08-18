@@ -20,7 +20,7 @@ class EntryList extends StatelessWidget {
           //);
           return TextField(
               decoration: InputDecoration(
-                  border: OutlineInputBorder(), labelText: items[index]));
+                  border: const OutlineInputBorder(), labelText: items[index]));
         });
   }
 }

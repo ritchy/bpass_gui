@@ -4,9 +4,10 @@ import 'package:super_tag_editor/tag_editor.dart';
 import 'package:super_tag_editor/widgets/rich_text_widget.dart';
 
 class AccountTagEditor extends StatefulWidget {
-  const AccountTagEditor({Key? key, this.title}) : super(key: key);
+  const AccountTagEditor(this.tags, {Key? key, this.title}) : super(key: key);
 
   final String? title;
+  final List<String> tags;
 
   @override
   _AccountTagEditor createState() => _AccountTagEditor();
@@ -34,11 +35,11 @@ class _AccountTagEditor extends State<AccountTagEditor> {
   /// This is just an example for using `TextEditingController` to manipulate
   /// the the `TextField` just like a normal `TextField`.
   _onPressedModifyTextField() {
-    final text = 'Test';
+    const text = 'Test';
     _textEditingController.text = text;
     _textEditingController.value = _textEditingController.value.copyWith(
       text: text,
-      selection: TextSelection(
+      selection: const TextSelection(
         baseOffset: text.length,
         extentOffset: text.length,
       ),
@@ -47,11 +48,12 @@ class _AccountTagEditor extends State<AccountTagEditor> {
 
   @override
   Widget build(BuildContext context) {
+    _values = widget.tags;
     return TagEditor<String>(
       length: _values.length,
       controller: _textEditingController,
       focusNode: _focusNode,
-      delimiters: [',', ' '],
+      delimiters: const [',', ' '],
       hasAddButton: true,
       resetTextOnSubmitted: true,
       // This is set to grey just to illustrate the `textStyle` prop
@@ -63,7 +65,7 @@ class _AccountTagEditor extends State<AccountTagEditor> {
       },
       inputDecoration: const InputDecoration(
         border: InputBorder.none,
-        hintText: 'Hint Text...',
+        hintText: 'Enter Tag Names ...',
       ),
       onTagChanged: (newValue) {
         setState(() {

@@ -121,7 +121,7 @@ class GoogleService {
   void fakeGoogleLogin() async {
     //processingGoogleFile = true;
     print("Faking login ...");
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 2));
     loggedIn = true;
     //processingGoogleFile = false;
     print("logged in .. notifying...");
@@ -1021,7 +1021,7 @@ class GoogleSettings {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> settings = Map<String, dynamic>();
+    final Map<String, dynamic> settings = <String, dynamic>{};
     //settings['accounts_filename'] = googleAccountsFileName;
     settings['key_base64'] = keyAsBase64;
     settings['auth_client'] = authClientSettings;
@@ -1044,7 +1044,7 @@ class AuthClientSettings {
   Map<String, dynamic> toJson() {
     //print("converting $this");
     lastUpdated = DateTime.now();
-    final Map<String, dynamic> settings = Map<String, dynamic>();
+    final Map<String, dynamic> settings = <String, dynamic>{};
     settings['last_updated'] = lastUpdated.toString();
     settings['data'] = data;
     settings['type'] = type;
@@ -1204,16 +1204,14 @@ class ClientAccessRequests {
   Map<String, dynamic> toJson() {
     //print("converting $this");
     lastUpdated = DateTime.now();
-    final Map<String, dynamic> results = Map<String, dynamic>();
+    final Map<String, dynamic> results = <String, dynamic>{};
     results['last_updated'] = lastUpdated.toString();
     results['clients'] = clientAccessRequests;
     return results;
   }
 }
 
-/**
- *  access_status: "requested/granted/denied"
- */
+///  access_status: "requested/granted/denied"
 class ClientAccess {
   String? clientId;
   String? clientName;
@@ -1242,7 +1240,7 @@ class ClientAccess {
     lastUpdated ??= DateTime.now();
     publicKey ??= "";
     encryptedAccessKey ??= "";
-    final Map<String, dynamic> clients = Map<String, dynamic>();
+    final Map<String, dynamic> clients = <String, dynamic>{};
     clients['last_updated'] = lastUpdated.toString();
     clients['client_id'] = clientId;
     clients['client_name'] = clientName;

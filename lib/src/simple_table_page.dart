@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:table_sticky_headers/table_sticky_headers.dart';
 
 class SimpleTablePage extends StatelessWidget {
-  SimpleTablePage(
-      {required this.data, required this.titleColumn, required this.titleRow});
+  const SimpleTablePage(
+      {super.key, required this.data, required this.titleColumn, required this.titleRow});
 
   final List<List<String>> data;
   final List<String> titleColumn;
@@ -13,7 +13,7 @@ class SimpleTablePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Sticky Headers Two-Dimension  Table'),
+        title: const Text('Sticky Headers Two-Dimension  Table'),
         backgroundColor: Colors.amber,
       ),
       body: StickyHeadersTable(
@@ -22,7 +22,7 @@ class SimpleTablePage extends StatelessWidget {
         columnsTitleBuilder: (i) => Text(titleColumn[i]),
         rowsTitleBuilder: (i) => Text(titleRow[i]),
         contentCellBuilder: (i, j) => Text(data[j][i]),
-        legendCell: Text('Sticky Legend'),
+        legendCell: const Text('Sticky Legend'),
       ),
     );
   }

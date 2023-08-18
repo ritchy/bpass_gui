@@ -77,7 +77,7 @@ class Settings {
       case ByteTheme.light:
         return lightColor;
       default:
-        return Color.fromARGB(248, 44, 44, 47);
+        return const Color.fromARGB(248, 44, 44, 47);
     }
   }
 

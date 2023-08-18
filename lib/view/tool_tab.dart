@@ -21,7 +21,7 @@ class ToolTab extends StatelessWidget implements PreferredSizeWidget {
             Expanded(
               child: Container(),
             ),
-            Text("Google Drive"),
+            const Text("Google Drive"),
             const Padding(
                 padding: EdgeInsets.all(
                     4)), // This trailing comma makes auto-formatting nicer for build methods.

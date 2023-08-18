@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:googleapis/servicemanagement/v1.dart';
 import 'package:password_manager/settings.dart';
 //import 'package:googleapis/calendar/v3.dart';
 //import 'package:flutter/src/material/colors.dart';
@@ -214,7 +213,7 @@ class NewAccountWidget extends StatelessWidget {
                         child: Text('tap here',
                             style: TextStyle(
                                 color: settings.getForegroundColor()))),
-                    Align(alignment: Alignment.centerLeft, child: Text(''))
+                    const Align(alignment: Alignment.centerLeft, child: Text(''))
                   ]),
             )
           ],

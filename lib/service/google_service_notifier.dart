@@ -65,10 +65,10 @@ class GuiPromptHandler extends PromptHandler {
   void handlePrompt(String url) async {
     //canLaunchUrl().then((bool result) {});
 
-    final Uri _url = Uri.parse(url);
-    if (await canLaunchUrl(_url)) {
-      if (!await launchUrl(_url)) {
-        throw 'Could not launch $_url';
+    final Uri url0 = Uri.parse(url);
+    if (await canLaunchUrl(url0)) {
+      if (!await launchUrl(url0)) {
+        throw 'Could not launch $url0';
       }
     } else {
       print('Please go to the following URL and grant access:');
