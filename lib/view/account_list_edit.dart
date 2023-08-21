@@ -64,13 +64,30 @@ class AccountListEditViewState extends State<AccountListEditView> {
                           SizedBox(
                               width: windowWidth,
                               child: Container(
+                                  //color: Colors.amber,
                                   padding:
-                                      const EdgeInsets.fromLTRB(0, 5, 5, 5),
-                                  child: getTextWidget(
-                                      "Account Name", item.name,
-                                      onChanged: (value) =>
-                                          item.name = value))),
+                                      const EdgeInsets.fromLTRB(10, 5, 5, 5),
+                                  child: Text(
+                                      //overflow: TextOverflow.clip,
+                                      //overflow: TextOverflow.ellipsis,
+                                      softWrap: true,
+                                      //maxLines: 2,
+                                      item.name,
+                                      //"Bank of America Jarbo",
+                                      style: const TextStyle(
+                                          fontSize: 28,
+                                          fontWeight: FontWeight.bold))))
                         ])),
+                //SizedBox(
+                //    width: windowWidth,
+                //    child: Container(
+                //       padding:
+                //            const EdgeInsets.fromLTRB(0, 5, 5, 5),
+                //        child: getTextWidget(
+                //            "Account Name", item.name,
+                //            onChanged: (value) =>
+                //                item.name = value))),
+                //])),
                 Container(
                     height: 50,
                     margin: const EdgeInsets.fromLTRB(4, 10, 4, 4),
@@ -151,14 +168,7 @@ class AccountListEditViewState extends State<AccountListEditView> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
                     TextButton(
-                      child: const Text('Cancel'),
-                      onPressed: () {
-                        //accountViewController.cancelEditMode();
-                        accountViewController.clearSelectedAccount();
-                      },
-                    ),
-                    TextButton(
-                        child: const Text('Save'),
+                        child: const Text('Done'),
                         onPressed: () {
                           log.fine("saving account $item");
                           //accountViewController.editSelectedAccount();
