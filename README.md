@@ -1,6 +1,6 @@
 # password_manager
 
-A simple password manager.
+A simple password manager for iOS, Android, MacOS, Linux and Windows.
 
 ## Getting Started
 
